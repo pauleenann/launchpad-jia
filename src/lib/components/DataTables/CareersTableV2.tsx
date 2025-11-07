@@ -93,7 +93,7 @@ export default function CareersV2Table() {
   useEffect(() => {
     const fetchOrgDetails = async () => {
       try {
-        const orgDetails = await axios.post("/api/feth-org-details", {
+        const orgDetails = await axios.post("/api/fetch-org-details", {
           orgID: activeOrg._id,
         });
         setAvailableJobSlots((orgDetails.data?.plan?.jobLimit || 3) + (orgDetails.data?.extraJobSlots || 0));
@@ -157,8 +157,8 @@ export default function CareersV2Table() {
     <div style={{ display: "flex", flexDirection: "row", gap: 8, alignItems: "center" }}>
     <a 
     href="/recruiter-dashboard/careers/new-career"
-    data-tooltip-id="add-career-tooltip"
-    data-tooltip-html={`You have reached the maximum number of jobs for your plan. Please upgrade your plan to add more jobs.`}
+    // data-tooltip-id="add-career-tooltip"
+    // data-tooltip-html={`You have reached the maximum number of jobs for your plan. Please upgrade your plan to add more jobs.`}
     >
     <button className="button-primary-v2"
     // disabled={totalActiveCareers >= availableJobSlots}
@@ -443,7 +443,7 @@ export default function CareersV2Table() {
         </div>
       </div>
     </div>
-    {totalActiveCareers >= availableJobSlots && <Tooltip className="career-fit-tooltip fade-in" id="add-career-tooltip"/>}
+    {/* {totalActiveCareers >= availableJobSlots && <Tooltip className="career-fit-tooltip fade-in" id="add-career-tooltip"/>} */}
     </>
   );
 }
