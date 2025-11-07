@@ -161,11 +161,11 @@ export default function CareersV2Table() {
     data-tooltip-html={`You have reached the maximum number of jobs for your plan. Please upgrade your plan to add more jobs.`}
     >
     <button className="button-primary-v2"
-    disabled={totalActiveCareers >= availableJobSlots}
-    style={{ 
-      opacity: totalActiveCareers >= availableJobSlots ? 0.5 : 1, 
-      cursor: totalActiveCareers >= availableJobSlots ? "not-allowed" : "pointer"
-    }}
+    // disabled={totalActiveCareers >= availableJobSlots}
+    // style={{ 
+    //   opacity: totalActiveCareers >= availableJobSlots ? 0.5 : 1, 
+    //   cursor: totalActiveCareers >= availableJobSlots ? "not-allowed" : "pointer"
+    // }}
     >
       <i className="la la-plus" /> Add new career
     </button>
