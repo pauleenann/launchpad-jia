@@ -2,11 +2,11 @@ import { useState } from "react";
 import CustomDropdown from "./CustomDropdown";
 
 const questionTypes = [
-    { name: "Short Answer", icon: '' },
-    { name: "Long Answer", icon: '' },
-    { name: "Dropdown", icon: '' },
-    { name: "Checkboxes", icon: '' },
-    { name: "Range", icon: "" },
+    { name: "Short Answer", icon: 'las la-user' },
+    { name: "Long Answer", icon: 'las la-align-justify' },
+    { name: "Dropdown", icon: 'las la-chevron-circle-down' },
+    { name: "Checkboxes", icon: 'las la-check-square' },
+    { name: "Range", icon: "las la-sort-amount-up" },
 ];
 
 export default function CareerPreScreeningQuestion({ index, question, screeningInfo, setScreeningInfo }: any) {
@@ -15,16 +15,16 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
 
     // handle change for dropdown
     const handleChange = (type: string) => {
-        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q) =>
-            q.category === question.category ? { ...q, questionType: type } : q
-        );
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
+            index===i ? { ...q, questionType: type, options:[] } : q
+        ); //update question type and reset options
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
     };
 
     // save question text
     const saveQuestion = () => {
-        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q) =>
-            q.category === question.category ? { ...q, question: questionValue } : q
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
+            index===i ? { ...q, question: questionValue } : q
         );
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
         setIsQuestionDisabled(true);
@@ -32,35 +32,35 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
 
     // add option
     const handleAddOption = () => {
-        const updatedQuestion = { ...question, options: [...question.options, ''] };
-        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q) =>
-            q.category === question.category ? updatedQuestion : q
-        );
-        setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
+        const updatedQuestion = { ...question, options: [...question.options, ''] }; //add empty option
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
+            index===i ? updatedQuestion : q
+        ); //update prescreeningquestions
+        setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions }); //update screeninginfo
     };
 
     // delete question
     const handleDeleteQuestion = () => {
-        const updatedQuestions = screeningInfo.preScreeningQuestions.filter((q) => q.category != question.category);
+        const updatedQuestions = screeningInfo.preScreeningQuestions.filter((q,i) => index!=i);
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
     };
 
     // delete option by index
-    const handleDeleteOption = (index: number) => {
-        const updatedOptions = question.options.filter((_, i) => i != index);
+    const handleDeleteOption = (indexToDelete: number) => {
+        const updatedOptions = question.options.filter((_, i) => i != indexToDelete);
         const updatedQuestion = { ...question, options: updatedOptions };
-        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q) =>
-            q.category === question.category ? updatedQuestion : q
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
+            index===i ? updatedQuestion : q
         );
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
     };
 
     // update option text by index
-    const handleOptionChange = (index: number, value: string) => {
-        const updatedOptions = question.options.map((opt, i) => (i === index ? value : opt));
+    const handleOptionChange = (indexToUpdate: number, value: string) => {
+        const updatedOptions = question.options.map((opt, i) => (i === indexToUpdate ? value : opt));
         const updatedQuestion = { ...question, options: updatedOptions };
-        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q) =>
-            q.category === question.category ? updatedQuestion : q
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
+            index===i ? updatedQuestion : q
         );
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
     };
@@ -104,7 +104,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                 </header>
 
                 <footer style={{ padding: '15px' }}>
-                    {question.questionType == 'Dropdown' && (
+                    {question.questionType == 'Dropdown' || question.questionType == 'Checkboxes' ? (
                         <>
                             {question.options.map((item, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', marginBottom: '10px' }}>
@@ -114,6 +114,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                                             type="text"
                                             value={item}
                                             style={{ width: '100%', border: 'none', outline: 'none', padding: '0 15px' }}
+                                            placeholder={`Option ${index+1}`}
                                             onChange={(e) => handleOptionChange(index, e.target.value)}
                                         />
                                     </div>
@@ -135,7 +136,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                                 Add option
                             </button>
                         </>
-                    )}
+                    ):''}
 
                     <hr />
 

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import CareerPreScreeningQuestion from "./CareerPreScreeningQuestion";
 import CareerStepHolder from "./CareerStepHolder";
 import CustomDropdown from "./CustomDropdown";
+import e from "express";
 
 const screeningSettingList = [
     {
@@ -33,8 +34,8 @@ const suggestedQuestions = [
 ]
 
 export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
-    const isSuggestedQuestionAdded = (category: string )=>{
-        return screeningInfo.preScreeningQuestions.some(s=>s.category==category)
+    const isSuggestedQuestionAdded = (question: string )=>{
+        return screeningInfo.preScreeningQuestions.some(s=>s.question==question)
     }
 
     useEffect(()=>{
@@ -74,8 +75,9 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                     className="form-control"
                     style={{ width: '100%', padding:'15px' ,marginTop:'10px'}}
                     placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
-                    name=""
-                    id=""
+                    name="cvSecretPrompt"
+                    id="cvSecretPrompt"
+                    onChange={(e)=>setScreeningInfo({...screeningInfo, cvSecretPrompt: e.target.value})}
                     ></textarea>
                 </CareerStepHolder>
 
@@ -95,10 +97,8 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                         setScreeningInfo({...screeningInfo, preScreeningQuestions:[
                             ...screeningInfo.preScreeningQuestions,
                             {
-                                category:'',
                                 question:'',
                                 options:[],
-                                range:[],
                                 questionType: 'Dropdown'
 
                             }
@@ -125,17 +125,17 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                         {suggestedQuestions.map((suggestion, index)=>(
                             <div key={index} style={{display: 'flex', alignItems:'center', justifyContent:'space-between', marginTop:'10px'}}>
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                                    <span style={{margin:'0', padding:'0', fontWeight:'500', color:isSuggestedQuestionAdded(suggestion.category)?'#adb5bd':'#2a2a2a'}}>{suggestion.category}</span>
-                                    <span style={{margin:'0', padding:'0', color:isSuggestedQuestionAdded(suggestion.category)?'#ced4da':''}}>{suggestion.question}</span>
+                                    <span style={{margin:'0', padding:'0', fontWeight:'500', color:isSuggestedQuestionAdded(suggestion.question)?'#adb5bd':'#2a2a2a'}}>{suggestion.category}</span>
+                                    <span style={{margin:'0', padding:'0', color:isSuggestedQuestionAdded(suggestion.question)?'#ced4da':''}}>{suggestion.question}</span>
                                 </div>
                                 {/* add suggested question */}
                                 <button 
-                                disabled={isSuggestedQuestionAdded(suggestion.category)}
+                                disabled={isSuggestedQuestionAdded(suggestion.question)}
                                 onClick={()=>{
                                     setScreeningInfo({...screeningInfo, 
-                                        preScreeningQuestions: [...screeningInfo.preScreeningQuestions, {...suggestion,
+                                        preScreeningQuestions: [...screeningInfo.preScreeningQuestions, {
+                                        question: suggestion.question,
                                         options:[],
-                                        range:[], 
                                         questionType:'Dropdown'}]
                                     })
                                 }}

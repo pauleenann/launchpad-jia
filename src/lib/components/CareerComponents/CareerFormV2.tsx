@@ -123,19 +123,9 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
           if (careerDetails.maximumSalary==0) newErrors.maximumSalary = "This is a required field";
         }
       
-        if (step === 2) {
-          // Example: validate CV review fields
-          // if (!cvField) newErrors.cvField = "This is a required field";
-        }
-      
         if (step === 3) {
           // Example: validate AI interview setup fields
           // if (!interviewField) newErrors.interviewField = "This is a required field";
-        }
-      
-        if (step === 4) {
-          // Example: final review validation
-          // if (!reviewField) newErrors.reviewField = "This is a required field";
         }
       
         setErrors(newErrors);
