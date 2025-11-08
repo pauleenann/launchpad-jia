@@ -13,21 +13,8 @@ import CareerStepHolder from "./CareerStepHolder";
 import CareerStep1 from "./CareerStep1";
 import CareerForm from "./CareerForm";
 import CareerStep2 from "./CareerStep2";
-// Setting List icons
-const screeningSettingList = [
-    {
-        name: "Good Fit and above",
-        icon: "la la-check",
-    },
-    {
-        name: "Only Strong Fit",
-        icon: "la la-check-double",
-    },
-    {
-        name: "No Automatic Promotion",
-        icon: "la la-times",
-    },
-];
+import CareerStep3 from "./CareerStep3";
+
 const stepLabels = [
     {
         step:1,
@@ -68,44 +55,47 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         cvSecretPrompt: '',
         preScreeningQuestions: []
     })
+    const [aiInterviewScreening, setAiInterviewScreening] = useState({
+        aiScreeningSetting: career?.aiScreeningSetting || "Good Fit and above",
+        requireVideo: career?.requireVideo || true,
+        questions: career?.questions || [
+            {
+              id: 1,
+              category: "CV Validation / Experience",
+              questionCountToAsk: null,
+              questions: [],
+            },
+            {
+              id: 2,
+              category: "Technical",
+              questionCountToAsk: null,
+              questions: [],
+            },
+            {
+              id: 3,
+              category: "Behavioral",
+              questionCountToAsk: null,
+              questions: [],
+            },
+            {
+              id: 4,
+              category: "Analytical",
+              questionCountToAsk: null,
+              questions: [],
+            },
+            {
+              id: 5,
+              category: "Others",
+              questionCountToAsk: null,
+              questions: [],
+            },
+        ]
+    })
   
-    const [requireVideo, setRequireVideo] = useState(career?.requireVideo || true);
-    const [questions, setQuestions] = useState(career?.questions || [
-      {
-        id: 1,
-        category: "CV Validation / Experience",
-        questionCountToAsk: null,
-        questions: [],
-      },
-      {
-        id: 2,
-        category: "Technical",
-        questionCountToAsk: null,
-        questions: [],
-      },
-      {
-        id: 3,
-        category: "Behavioral",
-        questionCountToAsk: null,
-        questions: [],
-      },
-      {
-        id: 4,
-        category: "Analytical",
-        questionCountToAsk: null,
-        questions: [],
-      },
-      {
-        id: 5,
-        category: "Others",
-        questionCountToAsk: null,
-        questions: [],
-      },
-    ]);
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(2);
+    const [currentStep, setCurrentStep] = useState(3);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -131,8 +121,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         setErrors(newErrors);
       
         return Object.keys(newErrors).length === 0;
-      };
-      
+    };
 
     const handleNextStep = () => {
         if (isFormValid(currentStep)) {
@@ -158,12 +147,12 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             description: careerDetails.description,
             workSetup: careerDetails.workSetup,
             workSetupRemarks: careerDetails,
-            questions,
+            questions: aiInterviewScreening.questions,
             lastEditedBy: userInfoSlice,
             status,
             updatedAt: Date.now(),
             screeningSetting:screeningInfo.screeningSetting,
-            requireVideo,
+            requireVideo: aiInterviewScreening.requireVideo,
             salaryNegotiable: careerDetails,
             minimumSalary: isNaN(Number(careerDetails.minimumSalary)) ? null : Number(careerDetails.minimumSalary),
             maximumSalary: isNaN(Number(careerDetails.maximumSalary)) ? null : Number(careerDetails.maximumSalary),
@@ -223,12 +212,12 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             description: careerDetails.description,
             workSetup: careerDetails,
             workSetupRemarks: careerDetails.workSetupRemarks,
-            questions,
+            questions: aiInterviewScreening.questions,
             lastEditedBy: userInfoSlice,
             createdBy: userInfoSlice,
             screeningSetting:screeningInfo.screeningSetting,
             orgID,
-            requireVideo,
+            requireVideo: aiInterviewScreening.requireVideo,
             salaryNegotiable: careerDetails.salaryNegotiable,
             minimumSalary: isNaN(Number(careerDetails.minimumSalary)) ? null : Number(careerDetails.minimumSalary),
             maximumSalary: isNaN(Number(careerDetails.maximumSalary)) ? null : Number(careerDetails.maximumSalary),
@@ -357,6 +346,14 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
           <CareerStep2
           screeningInfo={screeningInfo}
           setScreeningInfo={setScreeningInfo}/>
+        )}
+
+        {currentStep === 3 && (
+          <CareerStep3
+          aiInterviewScreening={aiInterviewScreening}
+          setAiInterviewScreening={setAiInterviewScreening}
+          jobTitle={careerDetails.jobTitle}
+          description={careerDetails.description}/>
         )}
     </div>
     )

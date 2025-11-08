@@ -22,6 +22,20 @@ const employmentTypeOptions = [
         name: "Part-Time",
     },
 ];
+const tips = [
+    {
+        tip: 'Use clear, standard job titles',
+        description: 'for better searchability (e.g., “Software Engineer” instead of “Code Ninja” or “Tech Rockstar”).'
+    },
+    {
+        tip: 'Avoid abbreviations',
+        description: 'or internal role codes that applicants may not understand (e.g., use “QA Engineer” instead of “QE II” or “QA-TL”).'
+    },
+    {
+        tip: 'Keep it concise',
+        description: '– job titles should be no more than a few words (2–4 max), avoiding fluff or marketing terms.'
+    }
+]
 
 export default function CareerStep1({careerDetails, setCareerDetails, errors}:any){
     const {
@@ -265,9 +279,9 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>Use clear, standard job titles</strong> for better searchability (e.g., “Software Engineer” instead of “Code Ninja” or “Tech Rockstar”).</p>
-                    <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>Avoid abbreviations</strong> or internal role codes that applicants may not understand (e.g., use “QA Engineer” instead of “QE II” or “QA-TL”).</p>
-                    <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>Keep it concise</strong> – job titles should be no more than a few words (2–4 max), avoiding fluff or marketing terms.</p>
+                    {tips.map(t=>(
+                        <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
+                    ))}
                 </CareerStepHolder>
             </div>
 

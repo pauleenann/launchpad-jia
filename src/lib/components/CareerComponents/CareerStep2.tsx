@@ -32,6 +32,16 @@ const suggestedQuestions = [
         question: 'How much is your expected salary?'
     },
 ]
+const tips = [
+    {
+        tip: 'Add a Secret Prompt',
+        description: 'to fine-tune how Jia scores and evaluates submitted CVs..'
+    },
+    {
+        tip: 'Add Pre-Screening Questions',
+        description: 'to collect key details such as notice period, work setup, or salary expectations to guide your review and candidate discussions.'
+    }
+]
 
 export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
     const isSuggestedQuestionAdded = (question: string )=>{
@@ -88,7 +98,9 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                     <div style={{display:'flex', alignItems: 'center', gap:'5px'}}>
                         <p style={{fontSize: '18px', color: '#2a2a2a', fontWeight:'500',margin:0}}>2. Pre-Screening Questions</p>  
                         <p style={{margin:0, color:'gray', fontSize: '18px'}}>(optional)</p>
-                        <div style={{margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>{screeningInfo.preScreeningQuestions.length}</div>
+                        <div style={{margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>
+                            {screeningInfo.preScreeningQuestions.length}
+                        </div>
                     </div>
                     
                     <button 
@@ -147,13 +159,14 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                 </CareerStepHolder>
             </div>
 
-            {/* steps */}
+            {/* tips */}
             <div>
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>Add a Secret Prompt</strong> to fine-tune how Jia scores and evaluates submitted CVs..</p>
-                    <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>Add Pre-Screening Questions</strong> to collect key details such as notice period, work setup, or salary expectations to guide your review and candidate discussions.</p>
+                    {tips.map(t=>(
+                        <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
+                    ))}
                 </CareerStepHolder>
             </div>
         </div>

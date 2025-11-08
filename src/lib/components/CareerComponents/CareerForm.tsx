@@ -311,7 +311,7 @@ export default function CareerForm({ career, formType, setShowEditModal }: { car
                       }}
                       ></input>
                       <span>Description</span>
-                      <RichTextEditor setText={setDescription} text={description} />
+                      <RichTextEditor setText={setDescription} text={description} error={''}/>
                   </div>
               </div>
           </div>
