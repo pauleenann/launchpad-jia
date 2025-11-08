@@ -86,6 +86,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                         }}
                         type="text"
                         value={questionValue}
+                        placeholder="Write your question..."
                         onClick={() => setIsQuestionDisabled(false)}
                         onChange={(e) => setQuestionValue(e.target.value)}
                         onBlur={saveQuestion}

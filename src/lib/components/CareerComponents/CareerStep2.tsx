@@ -89,7 +89,21 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                         <div style={{margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>{screeningInfo.preScreeningQuestions.length}</div>
                     </div>
                     
-                    <button style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", whiteSpace: "nowrap", display:'flex', alignItems:'center', gap:'8px', cursor: 'pointer'}}>
+                    <button 
+                    style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", whiteSpace: "nowrap", display:'flex', alignItems:'center', gap:'8px', cursor: 'pointer'}}
+                    onClick={()=>{
+                        setScreeningInfo({...screeningInfo, preScreeningQuestions:[
+                            ...screeningInfo.preScreeningQuestions,
+                            {
+                                category:'',
+                                question:'',
+                                options:[],
+                                range:[],
+                                questionType: 'Dropdown'
+
+                            }
+                        ]})
+                    }}>
                         <i className="las la-plus"></i>
                         Add custom
                     </button>
