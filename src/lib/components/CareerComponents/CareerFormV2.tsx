@@ -32,6 +32,38 @@ const stepLabels = [
         label:'Review Career'
     }
 ]
+const defaultQuestions = [
+    {
+      id: 1,
+      category: "CV Validation / Experience",
+      questionCountToAsk: null,
+      questions: [],
+    },
+    {
+      id: 2,
+      category: "Technical",
+      questionCountToAsk: null,
+      questions: [],
+    },
+    {
+      id: 3,
+      category: "Behavioral",
+      questionCountToAsk: null,
+      questions: [],
+    },
+    {
+      id: 4,
+      category: "Analytical",
+      questionCountToAsk: null,
+      questions: [],
+    },
+    {
+      id: 5,
+      category: "Others",
+      questionCountToAsk: null,
+      questions: [],
+    },
+]
 
 export default function CareerFormV2({ career, formType, setShowEditModal }: { career?: any, formType: string, setShowEditModal?: (show: boolean) => void }) {
     const { user, orgID } = useAppContext();
@@ -58,44 +90,12 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [aiInterviewScreening, setAiInterviewScreening] = useState({
         aiScreeningSetting: career?.aiScreeningSetting || "Good Fit and above",
         requireVideo: career?.requireVideo || true,
-        questions: career?.questions || [
-            {
-              id: 1,
-              category: "CV Validation / Experience",
-              questionCountToAsk: null,
-              questions: [],
-            },
-            {
-              id: 2,
-              category: "Technical",
-              questionCountToAsk: null,
-              questions: [],
-            },
-            {
-              id: 3,
-              category: "Behavioral",
-              questionCountToAsk: null,
-              questions: [],
-            },
-            {
-              id: 4,
-              category: "Analytical",
-              questionCountToAsk: null,
-              questions: [],
-            },
-            {
-              id: 5,
-              category: "Others",
-              questionCountToAsk: null,
-              questions: [],
-            },
-        ]
+        questions: career?.questions || defaultQuestions
     })
-  
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(3);
+    const [currentStep, setCurrentStep] = useState(1);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {

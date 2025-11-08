@@ -347,7 +347,7 @@ export default function (props) {
         <div style={{backgroundColor:'#f8f9fa', padding: '15px 10px', borderRadius:'15px', marginBottom:'20px'}}>
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8,marginBottom:'20px' }}>
               <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, }}>
-                <span style={{color: 'black', fontWeight:'500', marginLeft:'10px',}}>
+                <span style={{color: 'black', fontWeight:'500', marginLeft:'10px', fontSize: '18px',}}>
                   2. AI Interview Questions 
                 </span>
                 <div style={{ margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomDropdown from "./CustomDropdown";
 
 const questionTypes = [
@@ -41,7 +41,8 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
 
     // delete question
     const handleDeleteQuestion = () => {
-        const updatedQuestions = screeningInfo.preScreeningQuestions.filter((q,i) => index!=i);
+        console.log(index)
+        const updatedQuestions = screeningInfo.preScreeningQuestions.filter((q,i) => i!=index);
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
     };
 
@@ -64,6 +65,11 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
         );
         setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
     };
+
+    useEffect(()=>{
+        setQuestionValue(question.question); //update question
+        console.log('question',question)
+    },[question])
 
     return (
         <div draggable key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
