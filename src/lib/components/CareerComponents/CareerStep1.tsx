@@ -23,7 +23,7 @@ const employmentTypeOptions = [
     },
 ];
 
-export default function CareerStep1({careerDetails, setCareerDetails}:any){
+export default function CareerStep1({careerDetails, setCareerDetails, errors}:any){
     const {
         jobTitle,
         description,
@@ -51,12 +51,14 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                     <span>Job Title</span>
                     <input
                     value={jobTitle}
-                    className="form-control"
+                    className={`form-control ${errors.jobTitle&&'error-input'}`}
                     placeholder="Enter job title"
                     onChange={(e) => {
                         setCareerDetails({...careerDetails, jobTitle: e.target.value || ""});
                     }}
                     ></input>
+                    <p className="error">{errors?.jobTitle&&errors.jobTitle}</p>
+
 
                     {/* work setting */}
                     <p style={{color:'black', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Work Setting</p>
@@ -70,7 +72,9 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                             screeningSetting={employmentType}
                             settingList={employmentTypeOptions}
                             placeholder="Select Employment Type"
+                            error={errors?.employmentType||''}
                             />
+                            <p className="error">{errors?.employmentType&&errors.employmentType}</p>
                         </div>
 
                         <div>
@@ -82,7 +86,9 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                             screeningSetting={workSetup}
                             settingList={workSetupOptions}
                             placeholder="Select Work Setup"
+                            error={errors.workSetup||''}
                             />
+                            <p className="error">{errors?.workSetup&&errors.workSetup}</p>
                         </div>
                     </div>
 
@@ -99,7 +105,8 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                             screeningSetting={country}
                             settingList={[]}
                             placeholder="Select Country"
-                            />
+                            error={errors.country||''}/>
+                            <p className="error">{errors?.country&&errors.country}</p>
                         </div>
 
                         {/* state and province */}
@@ -117,7 +124,8 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                             screeningSetting={province}
                             settingList={provinceList}
                             placeholder="Select State / Province"
-                            />
+                            error={errors.province&&''}/>
+                            <p className="error">{errors?.province&&errors.province}</p>
                         </div>
 
                         {/* city */}
@@ -131,6 +139,7 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                             settingList={cityList}
                             placeholder="Select City"
                             />
+                            <p className="error">{errors?.city&&errors.city}</p>
                         </div>
                     </div>
 
@@ -150,7 +159,8 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                         {/* minimum salary */}
                         <div>
                         <span>Minimum Salary</span>
-                            <div style={{ position: "relative" }}>
+                            <div 
+                            style={{ position: "relative" }}>
                                 <span
                                 style={{
                                     position: "absolute",
@@ -166,7 +176,7 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                                 </span>
                                 <input
                                 type="number"
-                                className="form-control"
+                                className={`form-control ${errors.minimumSalary&&'error-input'}`}
                                 style={{ paddingLeft: "28px" }}
                                 placeholder="0"
                                 min={0}
@@ -187,6 +197,7 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                                 PHP
                             </span>
                             </div>
+                            <p className="error">{errors?.minimumSalary&&errors.minimumSalary}</p>
                         </div>
                         
                         {/* maximum salary */}
@@ -208,7 +219,7 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                                 </span>
                             <input
                                 type="number"
-                                className="form-control"
+                                className={`form-control ${errors.maximumSalary&&'error-input'}`}
                                 style={{ paddingLeft: "28px" }}
                                 placeholder="0"
                                 min={0}
@@ -229,18 +240,20 @@ export default function CareerStep1({careerDetails, setCareerDetails}:any){
                                 PHP
                             </span>
                             </div>
+                            <p className="error">{errors?.maximumSalary&&errors.maximumSalary}</p>
                         </div>
-                        
                     </div>
-
-
                 </CareerStepHolder>
 
                 {/* job description */}
                 <CareerStepHolder 
                 label="2. Job Description">
                     {/* react quill */}
-                    <RichTextEditor setText={(data)=>setCareerDetails({...careerDetails, description: data})} text={description} />
+                    <RichTextEditor 
+                    setText={(data)=>setCareerDetails({...careerDetails, description: data})} 
+                    text={description} 
+                    error={errors.description||''}/>
+                    <p className="error">{errors?.description&&errors.description}</p>
                 </CareerStepHolder>
             </div>
 

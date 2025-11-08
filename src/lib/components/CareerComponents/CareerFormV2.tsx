@@ -102,10 +102,54 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
     const [currentStep, setCurrentStep] = useState(1);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-    const isFormValid = () => {
-        return careerDetails.jobTitle?.trim().length > 0 && careerDetails.description?.trim().length > 0 && questions.some((q) => q.questions.length > 0) && careerDetails.workSetup?.trim().length > 0;
-    }
+    const isFormValid = (step: number) => {
+        const newErrors: { [key: string]: string } = {};
+      
+        if (step === 1) {
+          if (!careerDetails.jobTitle.trim()) newErrors.jobTitle = "This is a required field";
+          if (!careerDetails.description.trim()) newErrors.description = "This is a required field";
+          if (!careerDetails.workSetup.trim()) newErrors.workSetup = "This is a required field";
+          if (!careerDetails.employmentType.trim()) newErrors.employmentType = "This is a required field";
+          if (!careerDetails.province.trim()) newErrors.province = "This is a required field";
+          if (!careerDetails.city.trim()) newErrors.city = "This is a required field";
+          if (!careerDetails.country.trim()) newErrors.province = "This is a required field";
+          if (careerDetails.minimumSalary==0) newErrors.minimumSalary = "This is a required field";
+          if (careerDetails.maximumSalary==0) newErrors.maximumSalary = "This is a required field";
+        }
+      
+        if (step === 2) {
+          // Example: validate CV review fields
+          // if (!cvField) newErrors.cvField = "This is a required field";
+        }
+      
+        if (step === 3) {
+          // Example: validate AI interview setup fields
+          // if (!interviewField) newErrors.interviewField = "This is a required field";
+        }
+      
+        if (step === 4) {
+          // Example: final review validation
+          // if (!reviewField) newErrors.reviewField = "This is a required field";
+        }
+      
+        setErrors(newErrors);
+      
+        return Object.keys(newErrors).length === 0;
+      };
+      
+
+    const handleNextStep = () => {
+        if (isFormValid(currentStep)) {
+          setCurrentStep(currentStep + 1);
+        } else {
+          errorToast("Please fill out all required fields", 1300);
+        }
+
+        console.log(errors)
+    };
+      
 
     const updateCareer = async (status: string) => {
         if (Number(careerDetails.minimumSalary) && Number(careerDetails.maximumSalary) && Number(careerDetails.minimumSalary) > Number(careerDetails.maximumSalary)) {
@@ -251,20 +295,17 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
               <h1 style={{ fontSize: "24px", fontWeight: 550, color: "#111827" }}>Add new career</h1>
               <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px" }}>
                   <button
-                  disabled={!isFormValid() || isSavingCareer}
-                   style={{ width: "fit-content", color: "#414651", background: "#fff", border: "1px solid #D5D7DA", padding: "8px 16px", borderRadius: "60px", cursor: !isFormValid() || isSavingCareer ? "not-allowed" : "pointer", whiteSpace: "nowrap" }} onClick={() => {
+                  disabled={isSavingCareer}
+                   style={{ width: "fit-content", color: "#414651", background: "#fff", border: "1px solid #D5D7DA", padding: "8px 16px", borderRadius: "60px", cursor: "pointer", whiteSpace: "nowrap" }} onClick={() => {
                     confirmSaveCareer("inactive");
                       }}>
                           Save as Unpublished
                   </button>
                   <button 
-                  disabled={!isFormValid() || isSavingCareer}
+                  disabled={isSavingCareer}
                   style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", whiteSpace: "nowrap", display:'flex', alignItems:'center', gap:'8px', cursor: 'pointer'}}
                   onClick={() => {
-                    // if(currentStep < 4){
-                    //     setCurrentStep(currentStep + 1);
-                    // }
-                    console.log(careerDetails)
+                    handleNextStep()
                   }}>
                     Save and Continue
                     <i className="las la-arrow-right" style={{fontSize:'20px'}}></i>
@@ -281,15 +322,15 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
                         Cancel
                 </button>
                 <button
-                  disabled={!isFormValid() || isSavingCareer}
-                   style={{ width: "fit-content", color: "#414651", background: "#fff", border: "1px solid #D5D7DA", padding: "8px 16px", borderRadius: "60px", cursor: !isFormValid() || isSavingCareer ? "not-allowed" : "pointer", whiteSpace: "nowrap" }} onClick={() => {
+                  disabled={isSavingCareer}
+                   style={{ width: "fit-content", color: "#414651", background: "#fff", border: "1px solid #D5D7DA", padding: "8px 16px", borderRadius: "60px", cursor: "pointer", whiteSpace: "nowrap" }} onClick={() => {
                     updateCareer("inactive");
                     }}>
                           Save Changes as Unpublished
                   </button>
                   <button 
-                  disabled={!isFormValid() || isSavingCareer}
-                  style={{ width: "fit-content", background: !isFormValid() || isSavingCareer ? "#D5D7DA" : "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", cursor: !isFormValid() || isSavingCareer ? "not-allowed" : "pointer", whiteSpace: "nowrap"}} onClick={() => {
+                  disabled={isSavingCareer}
+                  style={{ width: "fit-content", background: isSavingCareer ? "#D5D7DA" : "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", cursor: isSavingCareer ? "not-allowed" : "pointer", whiteSpace: "nowrap"}} onClick={() => {
                     updateCareer("active");
                   }}>
                     <i className="la la-check-circle" style={{ color: "#fff", fontSize: 20, marginRight: 8 }}></i>
@@ -306,7 +347,8 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
                 key={index} 
                 label={step.label}
                 step={step.step} 
-                currentStep={currentStep}/>
+                currentStep={currentStep}
+                errors={Object.keys(errors).length}/>
             ))}    
         </div>
 
@@ -316,7 +358,8 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         {currentStep === 1 && (
             <CareerStep1 
             careerDetails={careerDetails}
-            setCareerDetails={setCareerDetails}/>
+            setCareerDetails={setCareerDetails}
+            errors={errors}/>
         )}
     </div>
     )

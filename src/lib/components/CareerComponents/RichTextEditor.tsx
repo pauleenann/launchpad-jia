@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 
-export default function RichTextEditor({setText, text}) {
+export default function RichTextEditor({setText, text, error}) {
     const descriptionEditorRef = useRef(null);
 
     const formatText = (command, value = null) => {
@@ -67,7 +67,7 @@ export default function RichTextEditor({setText, text}) {
         <div
           ref={descriptionEditorRef}
           contentEditable={true}
-          className="form-control"
+          className={`form-control ${error&&'error-input'}`}
           style={{
             height: "300px",
             overflowY: "auto",

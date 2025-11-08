@@ -2,14 +2,14 @@
 import { useState } from "react";
 
 export default function CustomDropdown(props) {
-    const { onSelectSetting, screeningSetting, settingList, placeholder } = props;
+    const { onSelectSetting, screeningSetting, settingList, placeholder, error } = props;
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
         <div className="dropdown w-100">
           <button
             disabled={settingList.length === 0}
-            className="dropdown-btn fade-in-bottom"
+            className={`${error&&'error-input'} dropdown-btn fade-in-bottom`}
             style={{ width: "100%", textTransform: "capitalize" }}
             type="button"
             onClick={() => setDropdownOpen((v) => !v)}

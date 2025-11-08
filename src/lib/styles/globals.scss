@@ -2491,3 +2491,13 @@ html {
 .bg-green-100 {
   background-color: #e6f9f0 !important;
 }
+
+.error{
+  color: red;
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+.error-input{
+  border: 1px solid red !important;
+}
