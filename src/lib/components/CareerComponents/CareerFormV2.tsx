@@ -63,7 +63,6 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         provinceList:[],
         cityList:[],
     });
-
   
     const [screeningSetting, setScreeningSetting] = useState(career?.screeningSetting || "Good Fit and above");
     const [requireVideo, setRequireVideo] = useState(career?.requireVideo || true);
@@ -231,7 +230,6 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
       }
     }
 
-
     useEffect(() => {
         const parseProvinces = () => {
             const defaultProvince = philippineCitiesAndProvinces.provinces[0];
@@ -320,13 +318,6 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             careerDetails={careerDetails}
             setCareerDetails={setCareerDetails}/>
         )}
-        
-
-       
-        
-        
-
-        
     </div>
     )
 }
