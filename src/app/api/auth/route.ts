@@ -15,6 +15,7 @@ export async function POST(request: Request) {
 
     const { db } = await connectMongoDB();
     const admin = await db.collection("admins").findOne({ email: email });
+    const member = await db.collection("members").findOne({email:email})
 
     if (admin) {
       await db.collection("admins").updateOne(
@@ -29,7 +30,23 @@ export async function POST(request: Request) {
       );
 
       return NextResponse.json(admin);
-    } else {
+    } else if(member){
+      await db.collection("members").updateOne(
+        { email: email },
+        {
+          $set: {
+            name: name,
+            image: image,
+            lastLogin: new Date(),
+          },
+        }
+      );
+
+      return NextResponse.json({
+        message: "Member logged in successfully"
+      });
+    }
+    else {
       const applicant = await db
         .collection("applicants")
         .findOne({ email: email });

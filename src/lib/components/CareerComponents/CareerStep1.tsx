@@ -1,0 +1,259 @@
+import CareerStepHolder from "./CareerStepHolder";
+import CustomDropdown from "./CustomDropdown";
+import philippineCitiesAndProvinces from "../../../../public/philippines-locations.json";
+import RichTextEditor from "./RichTextEditor";
+
+const workSetupOptions = [
+    {
+        name: "Fully Remote",
+    },
+    {
+        name: "Onsite",
+    },
+    {
+        name: "Hybrid",
+    },
+];
+const employmentTypeOptions = [
+    {
+        name: "Full-Time",
+    },
+    {
+        name: "Part-Time",
+    },
+];
+
+export default function CareerStep1({careerDetails, setCareerDetails}:any){
+    const {
+        jobTitle,
+        description,
+        workSetup,
+        workSetupRemarks,
+        employmentType,
+        salaryNegotiable,
+        minimumSalary,
+        maximumSalary,
+        country,
+        province,
+        city,
+        provinceList,
+        cityList,
+    } = careerDetails;
+    return (
+        <div style={{display:'grid', gridTemplateColumns:'1fr 30%', gap:'20px', marginTop:'30px'}}>
+            {/* form */}
+            <div>
+                {/* Career info */}
+                <CareerStepHolder 
+                label="1. Career Information">
+                    {/* basic information */}
+                    <p style={{color:'black', fontWeight:'500', margin:'2px'}}>Basic Information</p>
+                    <span>Job Title</span>
+                    <input
+                    value={jobTitle}
+                    className="form-control"
+                    placeholder="Enter job title"
+                    onChange={(e) => {
+                        setCareerDetails({...careerDetails, jobTitle: e.target.value || ""});
+                    }}
+                    ></input>
+
+                    {/* work setting */}
+                    <p style={{color:'black', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Work Setting</p>
+                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px'}}>
+                        <div>
+                            <span>Employment Type</span>
+                            <CustomDropdown
+                            onSelectSetting={(employmentType) => {
+                                setCareerDetails({...careerDetails, employmentType: employmentType});
+                            }}
+                            screeningSetting={employmentType}
+                            settingList={employmentTypeOptions}
+                            placeholder="Select Employment Type"
+                            />
+                        </div>
+
+                        <div>
+                            <span>Arrangement</span>
+                            <CustomDropdown
+                            onSelectSetting={(setting) => {
+                                setCareerDetails({...careerDetails, workSetup: setting});
+                            }}
+                            screeningSetting={workSetup}
+                            settingList={workSetupOptions}
+                            placeholder="Select Work Setup"
+                            />
+                        </div>
+                    </div>
+
+                    {/* location */}
+                    <p style={{color:'black', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Location</p>
+                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'20px'}}>
+                        {/* country */}
+                        <div>
+                            <span>Country</span>
+                            <CustomDropdown
+                            onSelectSetting={(setting) => {
+                                setCareerDetails({...careerDetails, country: setting});
+                            }}
+                            screeningSetting={country}
+                            settingList={[]}
+                            placeholder="Select Country"
+                            />
+                        </div>
+
+                        {/* state and province */}
+                        <div>
+                            <span>State / Province</span>
+                            <CustomDropdown
+                            onSelectSetting={(province) => {
+                                setCareerDetails({...careerDetails, province: province});
+                                const provinceObj = provinceList.find((p) => p.name === province);
+                                const cities = philippineCitiesAndProvinces.cities.filter((city) => city.province === provinceObj.key);
+                                setCareerDetails({...careerDetails, 
+                                cityList: cities, 
+                                city: cities[0].name});
+                            }}
+                            screeningSetting={province}
+                            settingList={provinceList}
+                            placeholder="Select State / Province"
+                            />
+                        </div>
+
+                        {/* city */}
+                        <div>
+                            <span>City</span>
+                            <CustomDropdown
+                            onSelectSetting={(city) => {
+                                setCareerDetails({...careerDetails, city: city});
+                            }}
+                            screeningSetting={city}
+                            settingList={cityList}
+                            placeholder="Select City"
+                            />
+                        </div>
+                    </div>
+
+                    {/* salary */}
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between",marginTop:'20px' }}>
+                        <span style={{fontSize: 16, color: "#181D27", fontWeight: 700}}>Salary</span>
+
+                        <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", gap: 8, minWidth: "130px" }}>
+                            <label className="switch">
+                                <input type="checkbox" checked={salaryNegotiable} onChange={() => setCareerDetails({...careerDetails, salaryNegotiable: !salaryNegotiable})} />
+                                <span className="slider round"></span>
+                            </label>
+                            <span>{salaryNegotiable ? "Negotiable" : "Fixed"}</span>
+                        </div>
+                    </div>
+                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px'}}>
+                        {/* minimum salary */}
+                        <div>
+                        <span>Minimum Salary</span>
+                            <div style={{ position: "relative" }}>
+                                <span
+                                style={{
+                                    position: "absolute",
+                                    left: "12px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    color: "#6c757d",
+                                    fontSize: "16px",
+                                    pointerEvents: "none",
+                                }}
+                                >
+                                P
+                                </span>
+                                <input
+                                type="number"
+                                className="form-control"
+                                style={{ paddingLeft: "28px" }}
+                                placeholder="0"
+                                min={0}
+                                value={minimumSalary}
+                                onChange={(e) => {
+                                    setCareerDetails({...careerDetails, minimumSalary: e.target.value || ""});
+                                }}
+                                />
+                            <span style={{
+                                position: "absolute",
+                                right: "30px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "#6c757d",
+                                fontSize: "16px",
+                                pointerEvents: "none",
+                            }}>
+                                PHP
+                            </span>
+                            </div>
+                        </div>
+                        
+                        {/* maximum salary */}
+                        <div>
+                            <span>Maximum Salary</span>
+                            <div style={{ position: "relative" }}>
+                            <span
+                                style={{
+                                    position: "absolute",
+                                    left: "12px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    color: "#6c757d",
+                                    fontSize: "16px",
+                                    pointerEvents: "none",
+                                }}
+                                >
+                                P
+                                </span>
+                            <input
+                                type="number"
+                                className="form-control"
+                                style={{ paddingLeft: "28px" }}
+                                placeholder="0"
+                                min={0}
+                                value={maximumSalary}
+                                onChange={(e) => {
+                                setCareerDetails({...careerDetails, maximumSalary: e.target.value || ""});
+                                }}
+                            ></input>
+                            <span style={{
+                                position: "absolute",
+                                right: "30px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "#6c757d",
+                                fontSize: "16px",
+                                pointerEvents: "none",
+                            }}>
+                                PHP
+                            </span>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                </CareerStepHolder>
+
+                {/* job description */}
+                <CareerStepHolder 
+                label="2. Job Description">
+                    {/* react quill */}
+                    <RichTextEditor setText={(data)=>setCareerDetails({...careerDetails, description: data})} text={description} />
+                </CareerStepHolder>
+            </div>
+
+            {/* tips */}
+            <div>
+                <CareerStepHolder
+                label={'Tips'}>
+                    <p style={{fontWeight:'500'}}><strong style={{color:'black'}}>Use clear, standard job titles</strong> for better searchability (e.g., “Software Engineer” instead of “Code Ninja” or “Tech Rockstar”).</p>
+                    <p style={{fontWeight:'500'}}><strong style={{color:'black'}}>Avoid abbreviations</strong> or internal role codes that applicants may not understand (e.g., use “QA Engineer” instead of “QE II” or “QA-TL”).</p>
+                    <p style={{fontWeight:'500'}}><strong style={{color:'black'}}>Keep it concise</strong> – job titles should be no more than a few words (2–4 max), avoiding fluff or marketing terms.</p>
+                </CareerStepHolder>
+            </div>
+
+        </div>
+    )
+}
