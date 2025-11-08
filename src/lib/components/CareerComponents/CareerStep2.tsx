@@ -86,7 +86,7 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                     <div style={{display:'flex', alignItems: 'center', gap:'5px'}}>
                         <p style={{fontSize: '18px', color: '#2a2a2a', fontWeight:'500',margin:0}}>2. Pre-Screening Questions</p>  
                         <p style={{margin:0, color:'gray', fontSize: '18px'}}>(optional)</p>
-                        <div style={{margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>0</div>
+                        <div style={{margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>{screeningInfo.preScreeningQuestions.length}</div>
                     </div>
                     
                     <button style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", whiteSpace: "nowrap", display:'flex', alignItems:'center', gap:'8px', cursor: 'pointer'}}>
@@ -111,15 +111,18 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                         {suggestedQuestions.map((suggestion, index)=>(
                             <div key={index} style={{display: 'flex', alignItems:'center', justifyContent:'space-between', marginTop:'10px'}}>
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                                    <span style={{margin:'0', padding:'0', fontWeight:'500', color:'#2a2a2a'}}>{suggestion.category}</span>
-                                    <span style={{margin:'0', padding:'0'}}>{suggestion.question}</span>
+                                    <span style={{margin:'0', padding:'0', fontWeight:'500', color:isSuggestedQuestionAdded(suggestion.category)?'#adb5bd':'#2a2a2a'}}>{suggestion.category}</span>
+                                    <span style={{margin:'0', padding:'0', color:isSuggestedQuestionAdded(suggestion.category)?'#ced4da':''}}>{suggestion.question}</span>
                                 </div>
                                 {/* add suggested question */}
                                 <button 
                                 disabled={isSuggestedQuestionAdded(suggestion.category)}
                                 onClick={()=>{
                                     setScreeningInfo({...screeningInfo, 
-                                        preScreeningQuestions: [...screeningInfo.preScreeningQuestions, {...suggestion, options:[], questionType:''}]
+                                        preScreeningQuestions: [...screeningInfo.preScreeningQuestions, {...suggestion,
+                                        options:[],
+                                        range:[], 
+                                        questionType:'Dropdown'}]
                                     })
                                 }}
                                 style={{padding: '5px 15px', border:'1px solid gray', borderRadius:'20px', background:'white'}}>
