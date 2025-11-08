@@ -12,7 +12,7 @@ export default function CareerStepHolder({
     return (
         <div style={{backgroundColor:'#f8f9fa', padding: '15px 10px', borderRadius:'15px', marginBottom:'20px'}}>
             <div style={{color: 'black', fontWeight:'500', marginLeft:'10px', marginBottom:'15px', display:'flex', alignItems:'center', gap:'5px'}}>
-                {label=='Tips'&&<i style={{fontSize:'20px',}} className="las la-lightbulb"></i>}
+                {label=='Tips'&&<img src='/assets/tips.svg'/>}
                 <span style={{fontSize: '18px', }}>{label}</span>
                 {customHeader}
             </div>

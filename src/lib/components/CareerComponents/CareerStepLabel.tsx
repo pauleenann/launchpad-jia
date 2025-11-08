@@ -21,7 +21,7 @@ export default function CareerStepLabel({
                     <i style={{ color: 'red', fontSize: '20px' }} className="las la-exclamation-triangle"></i>
                 ) : 
                 isDoneStep && !hasErrors?
-                    <i style={{ color: 'black', fontSize: '20px' }} className="las la-check-circle"></i> 
+                    <img src="/assets/check.svg" alt="Done" />
                 : (
                     <span style={{
                         border: step <= currentStep ? '1px solid black' : '1px solid #e9ecef',

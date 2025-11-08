@@ -66,7 +66,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [screeningInfo, setScreeningInfo] = useState({
         screeningSetting: career?.screeningSetting || "Good Fit and above",
         cvSecretPrompt: '',
-        // preScreeningQuestions:
+        preScreeningQuestions: []
     })
   
     const [requireVideo, setRequireVideo] = useState(career?.requireVideo || true);
@@ -150,10 +150,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         } else {
           errorToast("Please fill out all required fields", 1300);
         }
-
-        console.log(errors)
     };
-      
 
     const updateCareer = async (status: string) => {
         if (Number(careerDetails.minimumSalary) && Number(careerDetails.maximumSalary) && Number(careerDetails.minimumSalary) > Number(careerDetails.maximumSalary)) {
