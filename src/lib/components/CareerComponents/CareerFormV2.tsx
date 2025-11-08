@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import InterviewQuestionGeneratorV2 from "./InterviewQuestionGeneratorV2";
-import RichTextEditor from "@/lib/components/CareerComponents/RichTextEditor";
-import CustomDropdown from "@/lib/components/CareerComponents/CustomDropdown";
 import philippineCitiesAndProvinces from "../../../../public/philippines-locations.json";
 import { candidateActionToast, errorToast } from "@/lib/Utils";
 import { useAppContext } from "@/lib/context/AppContext";
@@ -13,6 +11,8 @@ import FullScreenLoadingAnimation from "./FullScreenLoadingAnimation";
 import CareerStepLabel from "./CareerStepLabel";
 import CareerStepHolder from "./CareerStepHolder";
 import CareerStep1 from "./CareerStep1";
+import CareerForm from "./CareerForm";
+import CareerStep2 from "./CareerStep2";
 // Setting List icons
 const screeningSettingList = [
     {
@@ -63,8 +63,12 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         provinceList:[],
         cityList:[],
     });
+    const [screeningInfo, setScreeningInfo] = useState({
+        screeningSetting: career?.screeningSetting || "Good Fit and above",
+        cvSecretPrompt: '',
+        // preScreeningQuestions:
+    })
   
-    const [screeningSetting, setScreeningSetting] = useState(career?.screeningSetting || "Good Fit and above");
     const [requireVideo, setRequireVideo] = useState(career?.requireVideo || true);
     const [questions, setQuestions] = useState(career?.questions || [
       {
@@ -101,7 +105,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(2);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -171,7 +175,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             lastEditedBy: userInfoSlice,
             status,
             updatedAt: Date.now(),
-            screeningSetting,
+            screeningSetting:screeningInfo.screeningSetting,
             requireVideo,
             salaryNegotiable: careerDetails,
             minimumSalary: isNaN(Number(careerDetails.minimumSalary)) ? null : Number(careerDetails.minimumSalary),
@@ -235,7 +239,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             questions,
             lastEditedBy: userInfoSlice,
             createdBy: userInfoSlice,
-            screeningSetting,
+            screeningSetting:screeningInfo.screeningSetting,
             orgID,
             requireVideo,
             salaryNegotiable: careerDetails.salaryNegotiable,
@@ -360,6 +364,12 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             careerDetails={careerDetails}
             setCareerDetails={setCareerDetails}
             errors={errors}/>
+        )}
+
+        {currentStep === 2 && (
+          <CareerStep2
+          screeningInfo={screeningInfo}
+          setScreeningInfo={setScreeningInfo}/>
         )}
     </div>
     )

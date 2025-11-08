@@ -45,9 +45,10 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
             <div>
                 {/* Career info */}
                 <CareerStepHolder 
-                label="1. Career Information">
+                label="1. Career Information"
+                customHeader={''}>
                     {/* basic information */}
-                    <p style={{color:'black', fontWeight:'500', margin:'2px'}}>Basic Information</p>
+                    <p style={{color:'#2a2a2a', fontWeight:'500', margin:'2px'}}>Basic Information</p>
                     <span>Job Title</span>
                     <input
                     value={jobTitle}
@@ -61,7 +62,7 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
 
 
                     {/* work setting */}
-                    <p style={{color:'black', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Work Setting</p>
+                    <p style={{color:'#2a2a2a', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Work Setting</p>
                     <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px'}}>
                         <div>
                             <span>Employment Type</span>
@@ -93,7 +94,7 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
                     </div>
 
                     {/* location */}
-                    <p style={{color:'black', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Location</p>
+                    <p style={{color:'#2a2a2a', fontWeight:'500', margin:'2px', marginTop:'20px'}}>Location</p>
                     <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'20px'}}>
                         {/* country */}
                         <div>
@@ -247,7 +248,8 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
 
                 {/* job description */}
                 <CareerStepHolder 
-                label="2. Job Description">
+                label="2. Job Description"
+                customHeader={''}>
                     {/* react quill */}
                     <RichTextEditor 
                     setText={(data)=>setCareerDetails({...careerDetails, description: data})} 
@@ -260,10 +262,11 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
             {/* tips */}
             <div>
                 <CareerStepHolder
-                label={'Tips'}>
-                    <p style={{fontWeight:'500'}}><strong style={{color:'black'}}>Use clear, standard job titles</strong> for better searchability (e.g., “Software Engineer” instead of “Code Ninja” or “Tech Rockstar”).</p>
-                    <p style={{fontWeight:'500'}}><strong style={{color:'black'}}>Avoid abbreviations</strong> or internal role codes that applicants may not understand (e.g., use “QA Engineer” instead of “QE II” or “QA-TL”).</p>
-                    <p style={{fontWeight:'500'}}><strong style={{color:'black'}}>Keep it concise</strong> – job titles should be no more than a few words (2–4 max), avoiding fluff or marketing terms.</p>
+                label={'Tips'}
+                customHeader={''}>
+                    <p style={{fontWeight:'500'}}><strong style={{color:'#2a2a2a'}}>Use clear, standard job titles</strong> for better searchability (e.g., “Software Engineer” instead of “Code Ninja” or “Tech Rockstar”).</p>
+                    <p style={{fontWeight:'500'}}><strong style={{color:'#2a2a2a'}}>Avoid abbreviations</strong> or internal role codes that applicants may not understand (e.g., use “QA Engineer” instead of “QE II” or “QA-TL”).</p>
+                    <p style={{fontWeight:'500'}}><strong style={{color:'#2a2a2a'}}>Keep it concise</strong> – job titles should be no more than a few words (2–4 max), avoiding fluff or marketing terms.</p>
                 </CareerStepHolder>
             </div>
 
