@@ -55,6 +55,20 @@ export default function CareerStep4({careerDetails, screeningInfo, aiInterviewSc
                     </div>
                 </section>
 
+                {/* minimum and maximum salary */}
+                <section style={{display:'grid', gridTemplateColumns:'35% 1fr'}}>
+                    <div>
+                        <p style={{margin:0, color:'black', fontWeight:'500'}}>Minimum Salary</p>
+                        <p style={{margin:0, fontWeight:'400'}}>{careerDetails.minimumSalary||'N/A'}</p>
+                        <hr style={{margin:'15px 0'}}/>    
+                    </div>
+                    <div>
+                        <p style={{margin:0, color:'black', fontWeight:'500'}}>Maximum Salary</p>
+                        <p style={{margin:0, fontWeight:'400'}}>{careerDetails.maximumSalary||'N/A'}</p>
+                        <hr style={{margin:'15px 0'}}/>    
+                    </div>
+                </section>
+
                 {/* job description */}
                 <section>
                     <p style={{margin:0, color:'black', fontWeight:'500'}}>Job Description</p>

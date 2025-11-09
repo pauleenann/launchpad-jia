@@ -4,8 +4,8 @@ export default function CareerStepAccordion({label, isOpen, setIsOpen, edit, chi
             {/* header */}
             <header style={{width:'100%', height:'50px', display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                 <div style={{display:'flex', alignItems:"center", gap:'10px'}}>
-                    {!isOpen&&<i onClick={setIsOpen} className="las la-angle-down"></i>}
-                    {isOpen&&<i onClick={setIsOpen} className="las la-angle-up"></i>}
+                    {!isOpen&&<i style={{cursor:'pointer'}} onClick={setIsOpen} className="las la-angle-down"></i>}
+                    {isOpen&&<i style={{cursor:'pointer'}} onClick={setIsOpen} className="las la-angle-up"></i>}
                     <span style={{color:'black', fontWeight:'500', fontSize:'18px'}}>{label}</span>
                 </div>
 
