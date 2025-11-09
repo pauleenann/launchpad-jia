@@ -124,7 +124,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     };
 
     const handleNextStep = () => {
-        if (isFormValid(currentStep)) {
+        if (isFormValid(currentStep)&&currentStep!=4) {
           setCurrentStep(currentStep + 1);
         } else {
           errorToast("Please fill out all required fields", 1300);
