@@ -95,7 +95,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(3);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -114,8 +114,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         }
       
         if (step === 3) {
-          // Example: validate AI interview setup fields
-          // if (!interviewField) newErrors.interviewField = "This is a required field";
+          if(aiInterviewScreening.questions.some((q) => q.questions.length == 0)) newErrors.questions = "Please add at least 5 interview questions";
         }
       
         setErrors(newErrors);
@@ -353,7 +352,8 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
           aiInterviewScreening={aiInterviewScreening}
           setAiInterviewScreening={setAiInterviewScreening}
           jobTitle={careerDetails.jobTitle}
-          description={careerDetails.description}/>
+          description={careerDetails.description}
+          errors={errors}/>
         )}
     </div>
     )

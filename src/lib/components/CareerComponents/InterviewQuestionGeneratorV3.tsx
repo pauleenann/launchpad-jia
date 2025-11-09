@@ -11,7 +11,7 @@ import InterviewQuestionModal from "./InterviewQuestionModal";
 import FullScreenLoadingAnimation from "./FullScreenLoadingAnimation";
 
 export default function (props) {
-  const { questions, setQuestions, jobTitle, description } = props;
+  const { questions, setQuestions, jobTitle, description, error } = props;
   const [questionGenPrompt, setQuestionGenPrompt] = useState("");
   const questionCount = 5;
   const [showQuestionModal, setShowQuestionModal] = useState("");
@@ -361,8 +361,12 @@ export default function (props) {
               </button>
           </div>
             <div className="layered-card-content">
+              {error&&<div className="error">
+                <i className="las la-exclamation-triangle"></i>
+                <span style={{marginLeft:'3px'}}>{error}</span>
+              </div>}
               <div className="questions-set">
-          {questions.map((group, index) => (
+              {questions.map((group, index) => (
             <div
               className="question-group"
               key={index}

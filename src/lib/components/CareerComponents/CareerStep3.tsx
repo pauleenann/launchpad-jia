@@ -31,7 +31,8 @@ export default function CareerStep3({
     aiInterviewScreening, 
     setAiInterviewScreening, 
     jobTitle, 
-    description
+    description,
+    errors
 }:any){
     return (
         <div style={{display:'grid', gridTemplateColumns:'1fr 30%', gap:'20px', marginTop:'30px'}}>
@@ -79,7 +80,8 @@ export default function CareerStep3({
                 questions={aiInterviewScreening.questions} 
                 setQuestions={(questions) => setAiInterviewScreening({...aiInterviewScreening, questions:questions})} 
                 jobTitle={jobTitle} 
-                description={description} />   
+                description={description} 
+                error={errors.questions}/>   
                 
             </div>
 

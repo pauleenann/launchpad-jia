@@ -279,8 +279,8 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    {tips.map(t=>(
-                        <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
+                    {tips.map((t,i)=>(
+                        <p key={i} style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
                     ))}
                 </CareerStepHolder>
             </div>

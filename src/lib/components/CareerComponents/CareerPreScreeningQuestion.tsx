@@ -12,7 +12,39 @@ const questionTypes = [
 export default function CareerPreScreeningQuestion({ index, question, screeningInfo, setScreeningInfo }: any) {
     const [isQuestionDisabled, setIsQuestionDisabled] = useState(true);
     const [questionValue, setQuestionValue] = useState(question?.question || '');
+    const [rangeValues, setRangeValues] = useState({
+        minimumLabel:'',
+        minimumRange: '',
+        maximumLabel: '',
+        maximumRange: ''
+    })
 
+    // handle change for range
+    const handleRangeChange = (e: any) => {
+        const { name, value } = e.target;
+      
+        // update range values immediately and use the new object for updates
+        const updatedRangeValues = {
+          ...rangeValues,
+          [name]: value,
+        };
+        setRangeValues(updatedRangeValues);
+      
+        // update question with the new range values
+        const updatedQuestion = { ...question, options: [updatedRangeValues] };
+      
+        // update prescreening questions properly
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q, i) =>
+          i === index ? updatedQuestion : q
+        );
+      
+        // update screening info
+        setScreeningInfo({
+          ...screeningInfo,
+          preScreeningQuestions: updatedQuestions,
+        });
+    };
+      
     // handle change for dropdown
     const handleChange = (type: string) => {
         const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
@@ -109,6 +141,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                     </div>
                 </header>
 
+                {/* options */}
                 <footer style={{ padding: '15px' }}>
                     {question.questionType == 'Dropdown' || question.questionType == 'Checkboxes' ? (
                         <>
@@ -142,7 +175,41 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                                 Add option
                             </button>
                         </>
-                    ):''}
+                    ):question.questionType=='Range'
+                    ? <div style={{display: 'grid', gridTemplateColumns:"1fr 1fr", gap:'10px'}}>
+                        {/* minimum */}
+                        <div style={{display: 'flex', flexDirection:'column', gap:'3px'}}>
+                            <input 
+                            type="text" 
+                            style={{border:'0', outline:'0'}}
+                            placeholder="Enter label for minimum range (e.g. Minimum Salary)"
+                            name="minimumLabel"
+                            onChange={handleRangeChange}/>
+                            <input 
+                            className="form-control" 
+                            type="text" 
+                            placeholder="Enter minimum range"
+                            name="minimumRange"
+                            onChange={handleRangeChange}/>
+                        </div>
+
+                        {/* maximum */}
+                        <div style={{display: 'flex', flexDirection:'column', gap:'3px'}}>
+                            <input 
+                            type="text" 
+                            style={{border:'0', outline:'0'}}
+                            placeholder="Enter label for maximum range (e.g. Maximum Salary)"
+                            name="maximumLabel"
+                            onChange={handleRangeChange}/>
+                            <input 
+                            className="form-control" 
+                            type="text" 
+                            placeholder="Enter maximum range"
+                            name="maximumRange"
+                            onChange={handleRangeChange}/>
+                        </div>
+                    </div>
+                    :''}
 
                     <hr />
 

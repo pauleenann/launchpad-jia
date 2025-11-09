@@ -132,6 +132,8 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                         :<span >No pre-screening questions added yet</span>}
                        
                         <hr style={{margin:'20px 0'}}/>
+
+                        {/* pre-screening questions */}
                         <p style={{color:'#2a2a2a', fontWeight:'500', margin:'0', fontSize: '18px'}}>Suggested  Pre-screening Questions:</p>
                         {/* suggested qs */}
                         {suggestedQuestions.map((suggestion, index)=>(
@@ -148,7 +150,7 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                                         preScreeningQuestions: [...screeningInfo.preScreeningQuestions, {
                                         question: suggestion.question,
                                         options:[],
-                                        questionType:'Dropdown'}]
+                                        questionType: suggestion.category=='Asking Salary'?'Range':'Dropdown'}]
                                     })
                                 }}
                                 style={{padding: '5px 15px', border:'1px solid gray', borderRadius:'20px', background:'white'}}>
