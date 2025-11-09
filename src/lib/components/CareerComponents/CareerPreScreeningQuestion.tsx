@@ -184,12 +184,14 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                             style={{border:'0', outline:'0'}}
                             placeholder="Enter label for minimum range (e.g. Minimum Salary)"
                             name="minimumLabel"
+                            value={question.options?.minimumLabel}
                             onChange={handleRangeChange}/>
                             <input 
                             className="form-control" 
                             type="text" 
                             placeholder="Enter minimum range"
                             name="minimumRange"
+                            value={question.options?.minimumRange}
                             onChange={handleRangeChange}/>
                         </div>
 
@@ -200,12 +202,14 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                             style={{border:'0', outline:'0'}}
                             placeholder="Enter label for maximum range (e.g. Maximum Salary)"
                             name="maximumLabel"
+                            value={question.options?.maximumLabel}
                             onChange={handleRangeChange}/>
                             <input 
                             className="form-control" 
                             type="text" 
                             placeholder="Enter maximum range"
                             name="maximumRange"
+                            value={question.options?.maximumRange}
                             onChange={handleRangeChange}/>
                         </div>
                     </div>

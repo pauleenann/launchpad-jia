@@ -1,4 +1,4 @@
-export default function CareerStepAccordion({label, isOpen, setIsOpen, children}:any){
+export default function CareerStepAccordion({label, isOpen, setIsOpen, edit, children}:any){
     return (
         <div style={{width:'100%', backgroundColor:"#f8f9fa", borderRadius:"10px", padding:'10px 20px', marginBottom:'10px'}}>
             {/* header */}
@@ -9,8 +9,10 @@ export default function CareerStepAccordion({label, isOpen, setIsOpen, children}
                     <span style={{color:'black', fontWeight:'500', fontSize:'18px'}}>{label}</span>
                 </div>
 
+                {/* edit */}
                 <button 
-                style={{height:'30px', width:'30px', borderRadius:'100%', backgroundColor:'white', border:'1px solid gray', outline:'0'}}>
+                style={{height:'30px', width:'30px', borderRadius:'100%', backgroundColor:'white', border:'1px solid gray', outline:'0', cursor:'pointer'}}
+                onClick={edit}>
                     <i className="las la-pen"></i>
                 </button>
             </header>

@@ -96,7 +96,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(2);
+    const [currentStep, setCurrentStep] = useState(1);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -269,6 +269,10 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         parseProvinces();
       },[career])
 
+      useEffect(()=>{
+        console.log(aiInterviewScreening)
+      },[aiInterviewScreening])
+
     return (
         <div className="col">
         {formType === "add" ? (<div style={{ marginBottom: "35px", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
@@ -361,7 +365,8 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             <CareerStep4
             careerDetails={careerDetails}
             screeningInfo={screeningInfo}
-            aiInterviewScreening={aiInterviewScreening}/>
+            aiInterviewScreening={aiInterviewScreening}
+            editStep={(step)=>setCurrentStep(step)}/>
         )}
     </div>
     )
