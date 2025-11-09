@@ -14,6 +14,7 @@ import CareerStep1 from "./CareerStep1";
 import CareerForm from "./CareerForm";
 import CareerStep2 from "./CareerStep2";
 import CareerStep3 from "./CareerStep3";
+import CareerStep4 from "./CareerStep4";
 
 const stepLabels = [
     {
@@ -95,7 +96,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(3);
+    const [currentStep, setCurrentStep] = useState(2);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -354,6 +355,13 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
           jobTitle={careerDetails.jobTitle}
           description={careerDetails.description}
           errors={errors}/>
+        )}
+
+        {currentStep === 4 &&(
+            <CareerStep4
+            careerDetails={careerDetails}
+            screeningInfo={screeningInfo}
+            aiInterviewScreening={aiInterviewScreening}/>
         )}
     </div>
     )

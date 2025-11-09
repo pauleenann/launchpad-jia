@@ -31,7 +31,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
         setRangeValues(updatedRangeValues);
       
         // update question with the new range values
-        const updatedQuestion = { ...question, options: [updatedRangeValues] };
+        const updatedQuestion = { ...question, options: updatedRangeValues };
       
         // update prescreening questions properly
         const updatedQuestions = screeningInfo.preScreeningQuestions.map((q, i) =>
