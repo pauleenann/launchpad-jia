@@ -157,15 +157,15 @@ export default function CareersV2Table() {
     <div style={{ display: "flex", flexDirection: "row", gap: 8, alignItems: "center" }}>
     <a 
     href="/recruiter-dashboard/careers/new-career"
-    // data-tooltip-id="add-career-tooltip"
-    // data-tooltip-html={`You have reached the maximum number of jobs for your plan. Please upgrade your plan to add more jobs.`}
+    data-tooltip-id="add-career-tooltip"
+    data-tooltip-html={`You have reached the maximum number of jobs for your plan. Please upgrade your plan to add more jobs.`}
     >
     <button className="button-primary-v2"
-    // disabled={totalActiveCareers >= availableJobSlots}
-    // style={{ 
-    //   opacity: totalActiveCareers >= availableJobSlots ? 0.5 : 1, 
-    //   cursor: totalActiveCareers >= availableJobSlots ? "not-allowed" : "pointer"
-    // }}
+    disabled={totalActiveCareers >= availableJobSlots}
+    style={{ 
+      opacity: totalActiveCareers >= availableJobSlots ? 0.5 : 1, 
+      cursor: totalActiveCareers >= availableJobSlots ? "not-allowed" : "pointer"
+    }}
     >
       <i className="la la-plus" /> Add new career
     </button>
@@ -443,7 +443,7 @@ export default function CareersV2Table() {
         </div>
       </div>
     </div>
-    {/* {totalActiveCareers >= availableJobSlots && <Tooltip className="career-fit-tooltip fade-in" id="add-career-tooltip"/>} */}
+    {totalActiveCareers >= availableJobSlots && <Tooltip className="career-fit-tooltip fade-in" id="add-career-tooltip"/>}
     </>
   );
 }

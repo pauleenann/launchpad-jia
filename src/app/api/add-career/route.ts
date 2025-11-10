@@ -8,10 +8,13 @@ export async function POST(request: Request) {
     const {
       jobTitle,
       description,
-      questions,
       lastEditedBy,
       createdBy,
       screeningSetting,
+      cvSecretPrompt,
+      preScreeningQuestions,
+      aiScreeningSetting,
+      interviewQuestions,
       orgID,
       requireVideo,
       location,
@@ -25,8 +28,10 @@ export async function POST(request: Request) {
       province,
       employmentType,
     } = await request.json();
+
+    
     // Validate required fields
-    if (!jobTitle || !description || !questions || !location || !workSetup) {
+    if (!jobTitle || !description || !interviewQuestions || !location || !workSetup) {
       return NextResponse.json(
         {
           error:
@@ -38,51 +43,60 @@ export async function POST(request: Request) {
 
     const { db } = await connectMongoDB();
 
-    const orgDetails = await db.collection("organizations").aggregate([
-      {
-        $match: {
-          _id: new ObjectId(orgID)
-        }
-      },
-      {
-        $lookup: {
-            from: "organization-plans",
-            let: { planId: "$planId" },
-            pipeline: [
-                {
-                    $addFields: {
-                        _id: { $toString: "$_id" }
-                    }
-                },
-                {
-                    $match: {
-                        $expr: { $eq: ["$_id", "$$planId"] }
-                    }
-                }
-            ],
-            as: "plan"
-        }
-      },
-      {
-        $unwind: "$plan"
-      },
-    ]).toArray();
+    // const orgDetails = await db.collection("organizations").aggregate([
+    //   {
+    //     $match: {
+    //       _id: new ObjectId(orgID)
+    //     }
+    //   },
+    //   {
+    //     $lookup: {
+    //         from: "organization-plans",
+    //         let: { planId: "$planId" },
+    //         pipeline: [
+    //             {
+    //                 $addFields: {
+    //                     _id: { $toString: "$_id" }
+    //                 }
+    //             },
+    //             {
+    //                 $match: {
+    //                     $expr: { $eq: ["$_id", "$$planId"] }
+    //                 }
+    //             }
+    //         ],
+    //         as: "plan"
+    //     }
+    //   },
+    //   {
+    //     $unwind: "$plan"
+    //   },
+    // ]).toArray();
 
-    if (!orgDetails || orgDetails.length === 0) {
-      return NextResponse.json({ error: "Organization not found" }, { status: 404 });
-    }
+    // if (!orgDetails || orgDetails.length === 0) {
+    //   return NextResponse.json(
+    //     { error: "Organization not found" }, 
+    //     { status: 404 }
+    //   );
+    // }
 
-    const totalActiveCareers = await db.collection("careers").countDocuments({ orgID, status: "active" });
+    // const totalActiveCareers = await db.collection("careers").countDocuments({ orgID, status: "active" });
 
-    if (totalActiveCareers >= (orgDetails[0].plan.jobLimit + (orgDetails[0].extraJobSlots || 0))) {
-      return NextResponse.json({ error: "You have reached the maximum number of jobs for your plan" }, { status: 400 });
-    }
+    // if (totalActiveCareers >= (orgDetails[0].plan.jobLimit + (orgDetails[0].extraJobSlots || 0))) {
+    //   return NextResponse.json({ 
+    //     error: "You have reached the maximum number of jobs for your plan" }, 
+    //     { status: 400 }
+    //   );
+    // }
 
     const career = {
       id: guid(),
       jobTitle,
       description,
-      questions,
+      cvSecretPrompt,
+      preScreeningQuestions,
+      aiScreeningSetting,
+      interviewQuestions,
       location,
       workSetup,
       workSetupRemarks,
@@ -102,6 +116,8 @@ export async function POST(request: Request) {
       province,
       employmentType,
     };
+
+    console.log('career', career)
 
     await db.collection("careers").insertOne(career);
 

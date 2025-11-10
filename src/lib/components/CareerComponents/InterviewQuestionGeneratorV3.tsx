@@ -344,35 +344,119 @@ export default function (props) {
 
   return (
     <div >
-        <div style={{backgroundColor:'#f8f9fa', padding: '15px 10px', borderRadius:'15px', marginBottom:'20px'}}>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8,marginBottom:'20px' }}>
-              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, }}>
-                <span style={{color: 'black', fontWeight:'500', marginLeft:'10px', fontSize: '18px',}}>
-                  2. AI Interview Questions 
-                </span>
-                <div style={{ margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>
-                  {questions.reduce((acc, group) => acc + group.questions.length, 0)}
-                </div>
-              </div>
-              <button style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", cursor: "pointer", whiteSpace: "nowrap"}} onClick={() => {
-                generateAllQuestions();
-                  }}>
-                <i className="la la-bolt" style={{ fontSize: 20 }}></i> Generate All Questions
-              </button>
+      <div style={{backgroundColor:'#f8f9fa', padding: '15px 10px', borderRadius:'15px', marginBottom:'20px'}}>
+        
+        {/* header */}
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8,marginBottom:'20px' }}>
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, }}>
+            <span style={{color: 'black', fontWeight:'500', marginLeft:'10px', fontSize: '18px',}}>
+              2. AI Interview Questions 
+            </span>
+            <div style={{ margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>
+              {questions.reduce((acc, group) => acc + group.questions.length, 0)}
+            </div>
           </div>
-            <div className="layered-card-content">
-              {error&&<div className="error">
-                <i className="las la-exclamation-triangle"></i>
-                <span style={{marginLeft:'3px'}}>{error}</span>
-              </div>}
-              <div className="questions-set">
-              {questions.map((group, index) => (
-            <div
-              className="question-group"
+          <button style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", cursor: "pointer", whiteSpace: "nowrap"}} onClick={() => {
+          generateAllQuestions();}}>
+            <i className="la la-bolt" style={{ fontSize: 20 }}></i> Generate All Questions
+          </button>
+        </div>
+
+        {/* error */}
+        <div className="layered-card-content">
+          {error&&<div className="error">
+          <i className="las la-exclamation-triangle"></i>
+          <span style={{marginLeft:'3px'}}>{error}</span>
+        </div>}
+              
+        {/* questions (cv validation, etc) */}
+        <div className="questions-set">
+          {questions.map((group, index) => (
+          <div
+          className="question-group"
+          key={index}
+          draggable={true}
+          onDragStart={(e) => {
+            e.dataTransfer.setData("categoryId", group.id.toString());
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            const target = e.currentTarget;
+            const bounding = target.getBoundingClientRect();
+            const offset = bounding.y + bounding.height / 2;
+
+            if (e.clientY - offset > 0) {
+              target.style.borderBottom = "3px solid";
+              target.style.borderImage = "linear-gradient(90deg, #9fcaed 0%, #ceb6da 33%, #ebacc9 66%, #fccec0 100%) 1";
+              target.style.borderTop = "none";
+            } else {
+              target.style.borderTop = "3px solid";
+              target.style.borderImage = "linear-gradient(90deg, #9fcaed 0%, #ceb6da 33%, #ebacc9 66%, #fccec0 100%) 1";
+              target.style.borderBottom = "none";
+            }
+          }}
+          onDragLeave={(e) => {
+            e.currentTarget.style.borderTop = "none";
+            e.currentTarget.style.borderBottom = "none";
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.borderTop = "none";
+            e.currentTarget.style.borderBottom = "none";
+
+            const bounding = e.currentTarget.getBoundingClientRect();
+            const offset = bounding.y + bounding.height / 2;
+            const insertIndex = e.clientY - offset > 0 ? index + 1 : index;
+
+            const categoryId = Number(e.dataTransfer.getData("categoryId"));
+            if (!isNaN(categoryId) && categoryId !== group.id) {
+              // This is a category being dragged
+              handleReorderCategories(categoryId, insertIndex);
+            }
+
+            const draggedQuestionId = e.dataTransfer.getData("questionId");
+            const fromCategoryId = Number(
+              e.dataTransfer.getData("fromCategoryId")
+            );
+            if (draggedQuestionId && !isNaN(fromCategoryId)) {
+              // This is a question being dragged
+              handleReorderQuestions(
+                draggedQuestionId,
+                fromCategoryId,
+                group.id
+              );
+            }
+          }}>
+              
+            {/* Row of category */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <h3
+                style={{
+                  whiteSpace: "nowrap",
+                  minWidth: "fit-content",
+                  marginRight: "10px",
+                }}>
+                  {group.category}
+                </h3>
+              </div>
+
+              {/* Row of questions */}
+              {group.questions.map((question, index) => (
+              <div
+              className="question-item"
+              style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: "100%" }}
               key={index}
               draggable={true}
               onDragStart={(e) => {
-                e.dataTransfer.setData("categoryId", group.id.toString());
+                e.dataTransfer.setData(
+                  "questionId",
+                  question.id.toString()
+                );
+                e.dataTransfer.setData(
+                  "fromCategoryId",
+                  group.id.toString()
+                );
               }}
               onDragOver={(e) => {
                 e.preventDefault();
@@ -380,173 +464,93 @@ export default function (props) {
                 const bounding = target.getBoundingClientRect();
                 const offset = bounding.y + bounding.height / 2;
 
+                // Add visual indicator for drop position
                 if (e.clientY - offset > 0) {
-                  target.style.borderBottom = "3px solid";
+                  target.style.borderBottom = "2px solid";
                   target.style.borderImage = "linear-gradient(90deg, #9fcaed 0%, #ceb6da 33%, #ebacc9 66%, #fccec0 100%) 1";
                   target.style.borderTop = "none";
                 } else {
-                  target.style.borderTop = "3px solid";
+                  target.style.borderTop = "2px solid";
                   target.style.borderImage = "linear-gradient(90deg, #9fcaed 0%, #ceb6da 33%, #ebacc9 66%, #fccec0 100%) 1";
                   target.style.borderBottom = "none";
                 }
               }}
               onDragLeave={(e) => {
+                // Remove visual indicators
                 e.currentTarget.style.borderTop = "none";
                 e.currentTarget.style.borderBottom = "none";
               }}
               onDrop={(e) => {
                 e.preventDefault();
+                e.stopPropagation(); // Prevent bubbling to question-group handler
+
+                // Remove visual indicators
                 e.currentTarget.style.borderTop = "none";
                 e.currentTarget.style.borderBottom = "none";
 
-                const bounding = e.currentTarget.getBoundingClientRect();
-                const offset = bounding.y + bounding.height / 2;
-                const insertIndex = e.clientY - offset > 0 ? index + 1 : index;
-
-                const categoryId = Number(e.dataTransfer.getData("categoryId"));
-                if (!isNaN(categoryId) && categoryId !== group.id) {
-                  // This is a category being dragged
-                  handleReorderCategories(categoryId, insertIndex);
-                }
-
-                const draggedQuestionId = e.dataTransfer.getData("questionId");
+                const draggedQuestionId =
+                  e.dataTransfer.getData("questionId");
                 const fromCategoryId = Number(
                   e.dataTransfer.getData("fromCategoryId")
                 );
+
                 if (draggedQuestionId && !isNaN(fromCategoryId)) {
-                  // This is a question being dragged
+                  const bounding =
+                    e.currentTarget.getBoundingClientRect();
+                  const offset = bounding.y + bounding.height / 2;
+                  const insertIndex =
+                    e.clientY - offset > 0 ? index + 1 : index;
+
                   handleReorderQuestions(
                     draggedQuestionId,
                     fromCategoryId,
-                    group.id
+                    group.id,
+                    insertIndex
                   );
                 }
-              }}
-            >
-              {/* Row of category */}
-              <div>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <h3
-                    style={{
-                      whiteSpace: "nowrap",
-                      minWidth: "fit-content",
-                      marginRight: "10px",
-                    }}
-                  >
-                    {group.category}
-                  </h3>
+              }}>
+                {/* question */}
+                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, height: "100%" }}>
+                  <i className="la la-grip-vertical" style={{ fontSize: 20, color: "#A4A7AE" }}></i>
+                  <span style={{ wordBreak: "break-word", whiteSpace: "pre-line" }}>
+                    {question.question}
+                  </span>
                 </div>
-                {/* Row of questions */}
-                {group.questions.map((question, index) => (
-                  <div
-                    className="question-item"
-                    style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: "100%" }}
-                    key={index}
-                    draggable={true}
-                    onDragStart={(e) => {
-                      e.dataTransfer.setData(
-                        "questionId",
-                        question.id.toString()
-                      );
-                      e.dataTransfer.setData(
-                        "fromCategoryId",
-                        group.id.toString()
-                      );
-                    }}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      const target = e.currentTarget;
-                      const bounding = target.getBoundingClientRect();
-                      const offset = bounding.y + bounding.height / 2;
 
-                      // Add visual indicator for drop position
-                      if (e.clientY - offset > 0) {
-                        target.style.borderBottom = "2px solid";
-                        target.style.borderImage = "linear-gradient(90deg, #9fcaed 0%, #ceb6da 33%, #ebacc9 66%, #fccec0 100%) 1";
-                        target.style.borderTop = "none";
-                      } else {
-                        target.style.borderTop = "2px solid";
-                        target.style.borderImage = "linear-gradient(90deg, #9fcaed 0%, #ceb6da 33%, #ebacc9 66%, #fccec0 100%) 1";
-                        target.style.borderBottom = "none";
-                      }
-                    }}
-                    onDragLeave={(e) => {
-                      // Remove visual indicators
-                      e.currentTarget.style.borderTop = "none";
-                      e.currentTarget.style.borderBottom = "none";
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation(); // Prevent bubbling to question-group handler
-
-                      // Remove visual indicators
-                      e.currentTarget.style.borderTop = "none";
-                      e.currentTarget.style.borderBottom = "none";
-
-                      const draggedQuestionId =
-                        e.dataTransfer.getData("questionId");
-                      const fromCategoryId = Number(
-                        e.dataTransfer.getData("fromCategoryId")
-                      );
-
-                      if (draggedQuestionId && !isNaN(fromCategoryId)) {
-                        const bounding =
-                          e.currentTarget.getBoundingClientRect();
-                        const offset = bounding.y + bounding.height / 2;
-                        const insertIndex =
-                          e.clientY - offset > 0 ? index + 1 : index;
-
-                        handleReorderQuestions(
-                          draggedQuestionId,
-                          fromCategoryId,
-                          group.id,
-                          insertIndex
-                        );
-                      }
+                {/* edit button and trash*/}
+                <div className="button-set" style={{ gap: 8, display: "flex", alignItems: "center", flexDirection: "row"}}>
+                  <button
+                    style={{ background: "#fff", border: "1px solid #E9EAEB", borderRadius: "60px", cursor: "pointer", width: "82px", height: "36px" }}
+                    onClick={() => {
+                      setShowQuestionModal("edit");
+                      setQuestionModalGroupId(group.id);
+                      setQuestionModalQuestion(question);
                     }}
                   >
+                    <i className="la la-pencil-alt"></i>
+                    <span>Edit</span>
+                  </button>
 
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, height: "100%" }}>
-                      <i className="la la-grip-vertical" style={{ fontSize: 20, color: "#A4A7AE" }}></i>
-                      <span style={{ wordBreak: "break-word", whiteSpace: "pre-line" }}>
-                        {question.question}
-                      </span>
-                    </div>
+                  <button
+                    style={{ color: "#B42318", background: "#fff", border: "1px solid #B42318", borderRadius: "50%", width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
+                    onClick={() => {
+                      setShowQuestionModal("delete");
+                      setQuestionModalGroupId(group.id);
+                      setQuestionModalQuestion(question);
+                    }}
+                  >
+                    <i className="la la-trash text-red" style={{ fontSize: 20 }}></i>
+                  </button>
+                </div>
+              </div>))}
 
-                    <div className="button-set" style={{ gap: 8, display: "flex", alignItems: "center", flexDirection: "row"}}>
-                      <button
-                        style={{ background: "#fff", border: "1px solid #E9EAEB", borderRadius: "60px", cursor: "pointer", width: "82px", height: "36px" }}
-                        onClick={() => {
-                          setShowQuestionModal("edit");
-                          setQuestionModalGroupId(group.id);
-                          setQuestionModalQuestion(question);
-                        }}
-                      >
-                        <i className="la la-pencil-alt"></i>
-                        <span>Edit</span>
-                      </button>
-
-                      <button
-                        style={{ color: "#B42318", background: "#fff", border: "1px solid #B42318", borderRadius: "50%", width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
-                        onClick={() => {
-                          setShowQuestionModal("delete");
-                          setQuestionModalGroupId(group.id);
-                          setQuestionModalQuestion(question);
-                        }}
-                      >
-                        <i className="la la-trash text-red" style={{ fontSize: 20 }}></i>
-                      </button>
-                    </div>
-                  </div>
-                ))}
                 {/* Buttons to add or generate questions */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+              <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}>
                   <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                     <button
                     style={{ width: "fit-content", background: "black", color: "#fff", border: "1px solid #E9EAEB", padding: "8px 16px", borderRadius: "60px", cursor: "pointer", whiteSpace: "nowrap"}}

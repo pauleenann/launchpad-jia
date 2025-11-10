@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     if (!orgDoc || orgDoc.length === 0) {
       return Response.json(
         { error: "Organization not found" },
-        { status: 404 }
+        // { status: 404 }
       );
     }
 

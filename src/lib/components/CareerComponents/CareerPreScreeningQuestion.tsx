@@ -17,7 +17,7 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
         minimumRange: '',
         maximumLabel: '',
         maximumRange: ''
-    })
+    });
 
     // handle change for range
     const handleRangeChange = (e: any) => {
@@ -100,11 +100,53 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
 
     useEffect(()=>{
         setQuestionValue(question.question); //update question
-        console.log('question',question)
+        console.log(screeningInfo)
     },[question])
 
+    // Drag start
+    const handleDragStartQuestion = (e: React.DragEvent<HTMLDivElement>) => {
+        console.log(`dragging question in: ${index}`);
+        e.dataTransfer.setData('text/plain', index.toString()); // store index in drag event
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    // Drop
+    const handleDropQuestion = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        
+        const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+        if (isNaN(draggedIndex)) return;
+
+        const questions = [...screeningInfo.preScreeningQuestions];
+
+        // Remove dragged item
+        const [movedItem] = questions.splice(draggedIndex, 1);
+
+        // Insert at new position
+        questions.splice(index, 0, movedItem);
+
+        setScreeningInfo({
+            ...screeningInfo,
+            preScreeningQuestions: questions
+        });
+
+        console.log('updated questions: ', questions);
+        console.log('moved item: ', movedItem);
+        console.log(`dropped in index ${index}, index ${index}`);
+    }
+    
+    useEffect(()=>{
+        console.log(screeningInfo)
+    }, [screeningInfo])
+
     return (
-        <div draggable key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+        <div 
+        draggable 
+        key={index} 
+        onDragStart={handleDragStartQuestion}
+        onDragOver={(e)=> e.preventDefault()}
+        onDrop={handleDropQuestion}
+        style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
             <i className="las la-grip-vertical" style={{ fontSize: '25px', cursor: 'grab' }}></i>
             <div style={{ backgroundColor: 'white', border: '1px solid #e9ecef', width: '100%', borderRadius: '10px' }}>
                 {/* header */}

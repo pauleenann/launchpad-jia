@@ -115,20 +115,13 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         }
       
         if (step === 3) {
-          if(aiInterviewScreening.questions.some((q) => q.questions.length == 0)) newErrors.questions = "Please add at least 5 interview questions";
+            const totalCount = aiInterviewScreening.questions.reduce((acc, curr)=>acc+curr.questions.length,0)
+            if(totalCount<5) newErrors.questions = "Please add at least 5 interview questions";
         }
       
         setErrors(newErrors);
       
         return Object.keys(newErrors).length === 0;
-    };
-
-    const handleNextStep = () => {
-        if (isFormValid(currentStep)&&currentStep!=4) {
-          setCurrentStep(currentStep + 1);
-        } else {
-          errorToast("Please fill out all required fields", 1300);
-        }
     };
 
     const updateCareer = async (status: string) => {
@@ -212,12 +205,15 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             description: careerDetails.description,
             workSetup: careerDetails,
             workSetupRemarks: careerDetails.workSetupRemarks,
-            questions: aiInterviewScreening.questions,
             lastEditedBy: userInfoSlice,
             createdBy: userInfoSlice,
             screeningSetting:screeningInfo.screeningSetting,
             orgID,
+            cvSecretPrompt: screeningInfo.cvSecretPrompt,
+            preScreeningQuestions: screeningInfo.preScreeningQuestions,
+            aiScreeningSetting: aiInterviewScreening.aiScreeningSetting,
             requireVideo: aiInterviewScreening.requireVideo,
+            interviewQuestions: aiInterviewScreening.questions,
             salaryNegotiable: careerDetails.salaryNegotiable,
             minimumSalary: isNaN(Number(careerDetails.minimumSalary)) ? null : Number(careerDetails.minimumSalary),
             maximumSalary: isNaN(Number(careerDetails.maximumSalary)) ? null : Number(careerDetails.maximumSalary),
@@ -234,6 +230,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         try {
             
             const response = await axios.post("/api/add-career", career);
+            console.log(response)
             if (response.status === 200) {
             candidateActionToast(
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
@@ -271,7 +268,19 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
 
       useEffect(()=>{
         console.log(aiInterviewScreening)
-      },[aiInterviewScreening])
+    },[aiInterviewScreening])
+
+    const handleNextStep = () => {
+        if (isFormValid(currentStep)) {
+            if(currentStep<4){
+              setCurrentStep(currentStep + 1);  
+            }else{
+                confirmSaveCareer("active")
+            }
+        } else {
+          errorToast("Please fill out all required fields", 1300);
+        }
+    };
 
     return (
         <div className="col">
@@ -367,6 +376,13 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
             screeningInfo={screeningInfo}
             aiInterviewScreening={aiInterviewScreening}
             editStep={(step)=>setCurrentStep(step)}/>
+        )}
+
+        {showSaveModal && (
+            <CareerActionModal action={showSaveModal} onAction={(action) => saveCareer(action)} />
+        )}
+        {isSavingCareer && (
+            <FullScreenLoadingAnimation title={formType === "add" ? "Saving career..." : "Updating career..."} subtext={`Please wait while we are ${formType === "add" ? "saving" : "updating"} the career`} />
         )}
     </div>
     )

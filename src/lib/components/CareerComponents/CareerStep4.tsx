@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CareerStepAccordion from "./CareerStepAccordion";
 import parse from 'html-react-parser'
 
@@ -6,6 +6,12 @@ export default function CareerStep4({careerDetails, screeningInfo, aiInterviewSc
     const [isStep1Open, setIsStep1Open] = useState(true);
     const [isStep2Open, setIsStep2Open] = useState(true);
     const [isStep3Open, setIsStep3Open] = useState(true);
+
+    useEffect(()=>{
+        console.log("careerDetails", careerDetails);
+        console.log('screeningInfo', screeningInfo);
+        console.log('aiInterviewScreening', aiInterviewScreening)
+    },[careerDetails, screeningInfo, aiInterviewScreening])
 
     return (
         <div style={{width:'80%', height:'100%', margin:"auto", padding:'20px 0'}}>
