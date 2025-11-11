@@ -4,7 +4,6 @@ import React from "react";
 import HeaderBar from "@/lib/PageComponent/HeaderBar";
 import CareerForm from "@/lib/components/CareerComponents/CareerForm";
 import CareerFormV2 from "@/lib/components/CareerComponents/CareerFormV2";
-import { CareerContextProvider } from "@/lib/context/CareerContext";
 
 export default function NewCareerPage() {
     return (
