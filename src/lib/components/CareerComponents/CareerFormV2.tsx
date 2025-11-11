@@ -205,12 +205,17 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
                 </div>,
                 1300, 
             <i className="la la-check-circle" style={{ color: "#039855", fontSize: 32 }}></i>)
+            //reset sessionStorage
+            sessionStorage.clear();
+
+            // redirect user
             setTimeout(() => {
                 window.location.href = `/recruiter-dashboard/careers`;
             }, 1300);
             }
         } catch (error) {
-            errorToast("Failed to add career", 1300);
+            console.log(error)
+            errorToast((error?.response?.data?.error||"Failed to add career."), 1300);
         } finally {
             savingCareerRef.current = false;
             setIsSavingCareer(false);

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "@/lib/mongoDB/mongoDB";
 import { guid } from "@/lib/Utils";
+import sanitizeHtml from 'sanitize-html';
 import { ObjectId } from "mongodb";
 
 export async function POST(request: Request) {
@@ -29,13 +30,17 @@ export async function POST(request: Request) {
       employmentType,
     } = await request.json();
 
-    
+    //sanitize fields
+    const sanitizedJobTitle = sanitizeHtml(jobTitle, { allowedTags: [] });
+    const sanitizedDescription = sanitizeHtml(description);
+    const sanitizedCvSecretPrompt = sanitizeHtml(cvSecretPrompt, { allowedTags: [] });
+
     // Validate required fields
-    if (!jobTitle || !description || !interviewQuestions || !location || !workSetup) {
+    if (!sanitizedJobTitle || !sanitizedDescription) {
       return NextResponse.json(
         {
           error:
-            "Job title, description, questions, location and work setup are required",
+            "Make sure Job Title, and Description are valid inputs.",
         },
         { status: 400 }
       );
@@ -91,9 +96,9 @@ export async function POST(request: Request) {
 
     const career = {
       id: guid(),
-      jobTitle,
-      description,
-      cvSecretPrompt,
+      jobTitle: sanitizedJobTitle,
+      description: sanitizedDescription,
+      cvSecretPrompt: sanitizedCvSecretPrompt,
       preScreeningQuestions,
       aiScreeningSetting,
       interviewQuestions,
