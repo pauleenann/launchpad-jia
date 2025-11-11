@@ -43,7 +43,7 @@ export async function POST(req: Request) {
   const key: any = await axios
     .post("https://api.openai.com/v1/realtime/sessions", settings, {
       headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.NEXT_OPENAI_API_KEY}`,
       },
     })
     .then((res) => {

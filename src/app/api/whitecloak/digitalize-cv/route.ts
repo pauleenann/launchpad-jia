@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       - DO NOT include \`\`\`json or \`\`\` around the response.
     `;
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.NEXT_OPENAI_API_KEY,
   });
   const completion = await openai.responses.create({
     model: "o4-mini",

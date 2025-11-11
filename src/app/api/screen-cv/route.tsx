@@ -4,7 +4,7 @@ import OpenAI from "openai";
 import { sendEmail } from "@/lib/Email";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.NEXT_OPENAI_API_KEY,
 });
 
 export async function POST(request: Request) {
