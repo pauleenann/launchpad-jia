@@ -13,11 +13,12 @@ import CareerStep1 from "./CareerStep1";
 import CareerStep2 from "./CareerStep2";
 import CareerStep3 from "./CareerStep3";
 import CareerStep4 from "./CareerStep4";
-import { emptyCareerDetails, stepLabels } from "@/lib/constants/data";
+import { emptyAiInfo, emptyCareerDetails, emptyScreeningInfo, stepLabels } from "@/lib/constants/data";
 import { defaultQuestions } from "@/lib/constants/data";
 
 export default function CareerFormV2({ career, formType, setShowEditModal }: { career?: any, formType: string, setShowEditModal?: (show: boolean) => void }) {
     const { user, orgID } = useAppContext();
+    //states for step 1
     const [defaultCareerDetails, setDefaultCareerDetails] = useState({
         jobTitle: career?.jobTitle || "",
         description: career?.description || "",
@@ -37,20 +38,32 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         JSON.parse(sessionStorage.getItem('careerDetails')) ||
         emptyCareerDetails : defaultCareerDetails
     );
-    const [screeningInfo, setScreeningInfo] = useState({
+    // states for step 2
+    const [defaultScreeningInfo,setDefaultScreeningInfo] = useState({
         screeningSetting: career?.screeningSetting || "Good Fit and above",
         cvSecretPrompt: '',
         preScreeningQuestions: []
     })
-    const [aiInterviewScreening, setAiInterviewScreening] = useState({
+    const [screeningInfo, setScreeningInfo] = useState(formType==='add'?
+        JSON.parse(sessionStorage.getItem('screeningInfo')) ||
+        emptyScreeningInfo : defaultScreeningInfo 
+    );
+    // states for step 3
+    const [defaultAiInterviewInfo, setDefaultAiInterviewInfo] = useState({
         aiScreeningSetting: career?.aiScreeningSetting || "Good Fit and above",
         requireVideo: career?.requireVideo || true,
         questions: career?.questions || defaultQuestions
     })
+    const [aiInterviewScreening, setAiInterviewScreening] = useState(formType==='add'?
+        JSON.parse(sessionStorage.getItem('aiInterviewScreening')) ||
+        emptyAiInfo : defaultAiInterviewInfo 
+    );
+    // saving states
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(2);
+    // others
+    const [currentStep, setCurrentStep] = useState(parseInt(sessionStorage.getItem('currentStep'))||1);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -69,7 +82,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         }
       
         if (step === 3) {
-            const totalCount = aiInterviewScreening.questions.reduce((acc, curr)=>acc+curr.questions.length,0)
+            const totalCount = aiInterviewScreening.questions.reduce((acc, curr)=>acc+curr.questions?.length,0)
             if(totalCount<5) newErrors.questions = "Please add at least 5 interview questions";
         }
       
@@ -237,8 +250,14 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     };
 
     useEffect(()=>{
-        sessionStorage.setItem('careerDetails', JSON.stringify(careerDetails))
-    },[careerDetails])
+        // save information as draft
+        sessionStorage.setItem('careerDetails', JSON.stringify(careerDetails)); //save careerDetails as draft
+        sessionStorage.setItem('screeningInfo', JSON.stringify(screeningInfo)); //save screeningInfo as draft
+        sessionStorage.setItem('aiInterviewScreening', JSON.stringify(aiInterviewScreening)); //save aiInterviewScreening as draft
+
+        //save current step 
+        sessionStorage.setItem('currentStep', JSON.stringify(currentStep));
+    },[careerDetails, screeningInfo, aiInterviewScreening, currentStep])
 
     return (
         <div className="col">

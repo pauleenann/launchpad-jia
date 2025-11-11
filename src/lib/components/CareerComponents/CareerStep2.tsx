@@ -45,6 +45,7 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                     <span>Secret Prompts give you extra control over Jia’s evaluation style, complementing her accurate assessment of requirements from the job description.</span>
                     <textarea
                     className="form-control"
+                    value={screeningInfo.cvSecretPrompt}
                     style={{ width: '100%', padding:'15px' ,marginTop:'10px'}}
                     placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
                     name="cvSecretPrompt"
@@ -61,7 +62,7 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                         <p style={{fontSize: '18px', color: '#2a2a2a', fontWeight:'500',margin:0}}>2. Pre-Screening Questions</p>  
                         <p style={{margin:0, color:'gray', fontSize: '18px'}}>(optional)</p>
                         <div style={{margin:'0 3px', background:'#e9ecef', padding:'1px 10px', borderRadius:'20px', border: '1px solid #ced4da'}}>
-                            {screeningInfo.preScreeningQuestions.length}
+                            {screeningInfo.preScreeningQuestions?.length||0}
                         </div>
                     </div>
                     
@@ -83,7 +84,7 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                     </button>
                 </div>}>
                         {/* children */}
-                        {screeningInfo.preScreeningQuestions.length>0?
+                        {screeningInfo.preScreeningQuestions?.length>0?
                         screeningInfo.preScreeningQuestions.map((q,i)=>(
                             <CareerPreScreeningQuestion
                             index={i}

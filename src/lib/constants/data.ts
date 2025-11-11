@@ -143,3 +143,13 @@ export const emptyCareerDetails = {
     provinceList:[],
     cityList:[],
 }
+export const emptyScreeningInfo = {
+    screeningSetting: "Good Fit and above",
+    cvSecretPrompt: '',
+    preScreeningQuestions: []
+};
+export const emptyAiInfo = {
+    aiScreeningSetting: "Good Fit and above",
+    requireVideo: true,
+    questions: defaultQuestions
+}

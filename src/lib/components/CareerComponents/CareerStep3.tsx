@@ -66,8 +66,13 @@ export default function CareerStep3({
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    {careerStep3Tips.map(t=>(
-                        <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
+                    {careerStep3Tips.map((t, i)=>(
+                        <p 
+                        key={i}
+                        style={{fontWeight:'400'}}>
+                            <strong style={{color:'#2a2a2a'}}>{t.tip}</strong> 
+                            {t.description}
+                        </p>    
                     ))}
                 </CareerStepHolder>
             </div>
