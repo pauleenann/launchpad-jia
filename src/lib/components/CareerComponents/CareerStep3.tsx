@@ -1,31 +1,7 @@
 import CareerStepHolder from "./CareerStepHolder"
 import CustomDropdown from "./CustomDropdown"
 import InterviewQuestionGeneratorV3 from "./InterviewQuestionGeneratorV3";
-
-const screeningSettingList = [
-    {
-        name: "Good Fit and above",
-        icon: "la la-check",
-    },
-    {
-        name: "Only Strong Fit",
-        icon: "la la-check-double",
-    },
-    {
-        name: "No Automatic Promotion",
-        icon: "la la-times",
-    },
-];
-const tips = [
-    {
-        tip: 'Add a Secret Prompt',
-        description: 'to fine-tune how Jia scores and evaluates the interview responses.'
-    },
-    {
-        tip: 'Use “Generate Questions”',
-        description: 'to quickly create tailored interview questions, then refine or mix them with your own for balanced results.'
-    }
-]
+import { screeningSettingList, careerStep3Tips } from "@/lib/constants/data";
 
 export default function CareerStep3({
     aiInterviewScreening, 
@@ -90,7 +66,7 @@ export default function CareerStep3({
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    {tips.map(t=>(
+                    {careerStep3Tips.map(t=>(
                         <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
                     ))}
                 </CareerStepHolder>

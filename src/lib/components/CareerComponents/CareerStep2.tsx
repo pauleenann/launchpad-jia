@@ -3,45 +3,7 @@ import CareerPreScreeningQuestion from "./CareerPreScreeningQuestion";
 import CareerStepHolder from "./CareerStepHolder";
 import CustomDropdown from "./CustomDropdown";
 import e from "express";
-
-const screeningSettingList = [
-    {
-        name: "Good Fit and above",
-        icon: "la la-check",
-    },
-    {
-        name: "Only Strong Fit",
-        icon: "la la-check-double",
-    },
-    {
-        name: "No Automatic Promotion",
-        icon: "la la-times",
-    },
-];
-const suggestedQuestions = [
-    {
-        category: 'Notice Period',
-        question: 'How long is your notice period?'
-    },
-    {
-        category: 'Work Setup',
-        question: 'How often are you willing to report to the office each week?'
-    },
-    {
-        category: 'Asking Salary',
-        question: 'How much is your expected salary?'
-    },
-]
-const tips = [
-    {
-        tip: 'Add a Secret Prompt',
-        description: 'to fine-tune how Jia scores and evaluates submitted CVs..'
-    },
-    {
-        tip: 'Add Pre-Screening Questions',
-        description: 'to collect key details such as notice period, work setup, or salary expectations to guide your review and candidate discussions.'
-    }
-]
+import { screeningSettingList, suggestedQuestions, careerStep2Tips } from "@/lib/constants/data";
 
 export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
     const isSuggestedQuestionAdded = (question: string )=>{
@@ -166,8 +128,8 @@ export default function CareerStep2({screeningInfo, setScreeningInfo}):any{
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    {tips.map(t=>(
-                        <p style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
+                    {careerStep2Tips.map((t, i)=>(
+                        <p key={i} style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
                     ))}
                 </CareerStepHolder>
             </div>

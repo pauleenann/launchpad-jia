@@ -9,66 +9,16 @@ import axios from "axios";
 import CareerActionModal from "./CareerActionModal";
 import FullScreenLoadingAnimation from "./FullScreenLoadingAnimation";
 import CareerStepLabel from "./CareerStepLabel";
-import CareerStepHolder from "./CareerStepHolder";
 import CareerStep1 from "./CareerStep1";
-import CareerForm from "./CareerForm";
 import CareerStep2 from "./CareerStep2";
 import CareerStep3 from "./CareerStep3";
 import CareerStep4 from "./CareerStep4";
-
-const stepLabels = [
-    {
-        step:1,
-        label:'Career Details'
-    },
-    {
-        step:2,
-        label:'CV Review & Pre-screening'
-    },
-    {
-        step:3,
-        label:'AI Interview Setup'
-    },{
-        step:4,
-        label:'Review Career'
-    }
-]
-const defaultQuestions = [
-    {
-      id: 1,
-      category: "CV Validation / Experience",
-      questionCountToAsk: null,
-      questions: [],
-    },
-    {
-      id: 2,
-      category: "Technical",
-      questionCountToAsk: null,
-      questions: [],
-    },
-    {
-      id: 3,
-      category: "Behavioral",
-      questionCountToAsk: null,
-      questions: [],
-    },
-    {
-      id: 4,
-      category: "Analytical",
-      questionCountToAsk: null,
-      questions: [],
-    },
-    {
-      id: 5,
-      category: "Others",
-      questionCountToAsk: null,
-      questions: [],
-    },
-]
+import { emptyCareerDetails, stepLabels } from "@/lib/constants/data";
+import { defaultQuestions } from "@/lib/constants/data";
 
 export default function CareerFormV2({ career, formType, setShowEditModal }: { career?: any, formType: string, setShowEditModal?: (show: boolean) => void }) {
     const { user, orgID } = useAppContext();
-    const [careerDetails, setCareerDetails] = useState({
+    const [defaultCareerDetails, setDefaultCareerDetails] = useState({
         jobTitle: career?.jobTitle || "",
         description: career?.description || "",
         workSetup: career?.workSetup || "",
@@ -82,7 +32,11 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         city: career?.location || "",
         provinceList:[],
         cityList:[],
-    });
+    })
+    const [careerDetails, setCareerDetails] = useState(formType==='add'?
+        JSON.parse(sessionStorage.getItem('careerDetails')) ||
+        emptyCareerDetails : defaultCareerDetails
+    );
     const [screeningInfo, setScreeningInfo] = useState({
         screeningSetting: career?.screeningSetting || "Good Fit and above",
         cvSecretPrompt: '',
@@ -96,7 +50,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(2);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const isFormValid = (step: number) => {
@@ -281,6 +235,10 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
           errorToast("Please fill out all required fields", 1300);
         }
     };
+
+    useEffect(()=>{
+        sessionStorage.setItem('careerDetails', JSON.stringify(careerDetails))
+    },[careerDetails])
 
     return (
         <div className="col">

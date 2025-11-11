@@ -106,8 +106,8 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
     // Drag start
     const handleDragStartQuestion = (e: React.DragEvent<HTMLDivElement>) => {
         console.log(`dragging question in: ${index}`);
+        e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData('text/plain', index.toString()); // store index in drag event
-        e.dataTransfer.effectAllowed = 'move';
     }
 
     // Drop
@@ -133,6 +133,42 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
         console.log('updated questions: ', questions);
         console.log('moved item: ', movedItem);
         console.log(`dropped in index ${index}, index ${index}`);
+    }
+
+    const handleDragOption = (e: React.DragEvent<HTMLDivElement>, index:number)=>{
+        e.stopPropagation(); // ✋ prevents handleDragStartQuestion from firing
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData('text/plain', index.toString()); // store index in drag event
+        console.log('dragged option: ', index)
+    }
+
+    const handleDropOption = (e: React.DragEvent<HTMLDivElement>, index2: number)=>{
+        e.preventDefault();
+        e.stopPropagation(); // ✋ prevents handleDropQuestion from firing
+        
+        const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+        if (isNaN(draggedIndex)) return;
+        console.log('dragged index in drop option: ', draggedIndex)
+        console.log('dropped in: ', index2)
+
+        let options = [...question.options];
+        console.log('options: ', options)
+        const [movedOption] = options.splice(draggedIndex,1);
+        console.log('movedOption: ', movedOption)
+        options.splice(index2, 0, movedOption);
+        console.log('options: ', options)
+
+        // update options in question
+        const updatedQuestion = {...question, options: options}
+        console.log('updated question: ',updatedQuestion)
+
+        //update screening info
+        const updatedQuestions = screeningInfo.preScreeningQuestions.map((q,i) =>
+            index===i ? updatedQuestion : q
+        );
+        console.log('updated questions', updatedQuestions)
+        setScreeningInfo({ ...screeningInfo, preScreeningQuestions: updatedQuestions });
+
     }
     
     useEffect(()=>{
@@ -188,25 +224,32 @@ export default function CareerPreScreeningQuestion({ index, question, screeningI
                     {question.questionType == 'Dropdown' || question.questionType == 'Checkboxes' ? (
                         <>
                             {question.options.map((item, index) => (
-                                <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', marginBottom: '10px' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '50px 1fr', height: '50px', borderRadius: '5px', border: '1px solid #e9ecef', color: 'black', width: '100%' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #e9ecef' }}>{index + 1}</div>
-                                        <input
-                                            type="text"
-                                            value={item}
-                                            style={{ width: '100%', border: 'none', outline: 'none', padding: '0 15px' }}
-                                            placeholder={`Option ${index+1}`}
-                                            onChange={(e) => handleOptionChange(index, e.target.value)}
-                                        />
-                                    </div>
+                                <div
+                                draggable
+                                onDragStart={(e)=>handleDragOption(e, index)}
+                                onDragOver={(e)=> e.preventDefault()}
+                                onDrop={(e)=>handleDropOption(e, index)}>
+                                    <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', marginBottom: '10px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '50px 1fr', height: '50px', borderRadius: '5px', border: '1px solid #e9ecef', color: 'black', width: '100%' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #e9ecef' }}>{index + 1}</div>
+                                            <input
+                                                type="text"
+                                                value={item}
+                                                style={{ width: '100%', border: 'none', outline: 'none', padding: '0 15px' }}
+                                                placeholder={`Option ${index+1}`}
+                                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                            />
+                                        </div>
 
-                                    <button
-                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '35px', width: '35px', borderRadius: '100%', border: '1px solid #e9ecef', backgroundColor: 'white' }}
-                                        onClick={() => handleDeleteOption(index)}
-                                    >
-                                        <i className="las la-times"></i>
-                                    </button>
+                                        <button
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '35px', width: '35px', borderRadius: '100%', border: '1px solid #e9ecef', backgroundColor: 'white' }}
+                                            onClick={() => handleDeleteOption(index)}
+                                        >
+                                            <i className="las la-times"></i>
+                                        </button>
+                                    </div>    
                                 </div>
+                                
                             ))}
 
                             <button

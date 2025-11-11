@@ -2,40 +2,9 @@ import CareerStepHolder from "./CareerStepHolder";
 import CustomDropdown from "./CustomDropdown";
 import philippineCitiesAndProvinces from "../../../../public/philippines-locations.json";
 import RichTextEditor from "./RichTextEditor";
-
-const workSetupOptions = [
-    {
-        name: "Fully Remote",
-    },
-    {
-        name: "Onsite",
-    },
-    {
-        name: "Hybrid",
-    },
-];
-const employmentTypeOptions = [
-    {
-        name: "Full-Time",
-    },
-    {
-        name: "Part-Time",
-    },
-];
-const tips = [
-    {
-        tip: 'Use clear, standard job titles',
-        description: 'for better searchability (e.g., “Software Engineer” instead of “Code Ninja” or “Tech Rockstar”).'
-    },
-    {
-        tip: 'Avoid abbreviations',
-        description: 'or internal role codes that applicants may not understand (e.g., use “QA Engineer” instead of “QE II” or “QA-TL”).'
-    },
-    {
-        tip: 'Keep it concise',
-        description: '– job titles should be no more than a few words (2–4 max), avoiding fluff or marketing terms.'
-    }
-]
+import { workSetupOptions } from "@/lib/constants/data";
+import { employmentTypeOptions } from "@/lib/constants/data";
+import { careerStep1Tips } from "@/lib/constants/data";
 
 export default function CareerStep1({careerDetails, setCareerDetails, errors}:any){
     const {
@@ -279,7 +248,7 @@ export default function CareerStep1({careerDetails, setCareerDetails, errors}:an
                 <CareerStepHolder
                 label={'Tips'}
                 customHeader={''}>
-                    {tips.map((t,i)=>(
+                    {careerStep1Tips.map((t,i)=>(
                         <p key={i} style={{fontWeight:'400'}}><strong style={{color:'#2a2a2a'}}>{t.tip}</strong> {t.description}</p>    
                     ))}
                 </CareerStepHolder>
