@@ -170,7 +170,7 @@ export default function CareerFormV2({ career, formType, setShowEditModal }: { c
         const career = {
             jobTitle: careerDetails.jobTitle,
             description: careerDetails.description,
-            workSetup: careerDetails,
+            workSetup: careerDetails.workSetup,
             workSetupRemarks: careerDetails.workSetupRemarks,
             lastEditedBy: userInfoSlice,
             createdBy: userInfoSlice,
