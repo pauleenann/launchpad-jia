@@ -76,7 +76,7 @@ export async function signInWithGoogle(type) {
       const host = window.location.host;
 
       if (
-        (host.includes("localhost") || host.includes("hirejia.ai") || host.includes("launchpad-jia-ndq2.vercel.app")) &&
+        (host.includes("localhost") || host.includes("hirejia.ai")) &&
         res.data.role == "applicant"
       ) {
         Swal.fire({
@@ -155,7 +155,7 @@ export async function signInWithGoogle(type) {
         return false;
       }
 
-      if (host.startsWith("admin.hirejia.ai")|| host.includes("launchpad-jia-ndq2.vercel.app")) {
+      if (host.startsWith("admin.hirejia.ai")) {
         localStorage.role = "admin";
         window.location.href = "/admin-portal";
         return;
