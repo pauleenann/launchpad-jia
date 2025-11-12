@@ -155,7 +155,7 @@ export async function signInWithGoogle(type) {
         return false;
       }
 
-      if (host.startsWith("admin.hirejia.ai")) {
+      if (host.startsWith("admin.hirejia.ai")|| host.includes("launchpad-jia-ndq2.vercel.app")) {
         localStorage.role = "admin";
         window.location.href = "/admin-portal";
         return;
