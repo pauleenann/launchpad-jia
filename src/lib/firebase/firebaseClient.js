@@ -76,7 +76,7 @@ export async function signInWithGoogle(type) {
       const host = window.location.host;
 
       if (
-        (host.includes("localhost") || host.includes("hirejia.ai")) &&
+        (host.includes("localhost") || host.includes("hirejia.ai") || host.includes("launchpad-jia-ndq2.vercel.app")) &&
         res.data.role == "applicant"
       ) {
         Swal.fire({
